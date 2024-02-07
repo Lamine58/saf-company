@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Liste des utilisateurs')
+@section('title', 'Liste des categories indicateurs')
 
 @section('content')
 
@@ -13,12 +13,12 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">Liste des utilisateurs</h4>
+                            <h4 class="mb-sm-0">Liste des categories indicateurs</h4>
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">utilisateurs</a></li>
-                                    <li class="breadcrumb-item active">Liste des utilisateurs</li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Categories indicateurs</a></li>
+                                    <li class="breadcrumb-item active">Liste des categories indicateurs</li>
                                 </ol>
                             </div>
 
@@ -33,26 +33,20 @@
                                 <table id="table" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th></th>
-                                            <th>Nom et prénom</th>
-                                            <th>Téléphone</th>
-                                            <th>Email</th>
-                                            <th>Type de compte</th>
-                                            <th>Fournisseur</th>
-                                            <th>Zone</th>
+                                            <th>Categories indicateurs</th>
+                                            <th>Description</th>
+                                            <th>Total des indicateurs</th>
+                                            <th>Administrateur</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($users as $user)
+                                        @foreach ($categories as $category)
                                             <tr>
-                                                <td><img width="50" src="{{ $user->avatar!='' ? Storage::url($user->avatar) : asset('/images/user.jpeg')}}" alt=""></td>
-                                                <td>{{$user->first_name}} {{$user->last_name}}</td>
-                                                <td>{{$user->phone}}</td>
-                                                <td>{{$user->email}}</td>
-                                                <td>{{$user->account}}</td>
-                                                <td>{{$user->business->legal_name ?? ''}}</td>
-                                                <td>{{$user->zone->name ?? ''}}</td>
+                                                <td>{{$category->name}}</td>
+                                                <td>{{$category->description}}</td>
+                                                <td>{{$category->indicators->count()}}</td>
+                                                <td>{{$category->user->first_name}} {{$category->user->last_name}}</td>
                                                 <td>
                                                     
                                                     <div class="dropdown d-inline-block">
@@ -61,10 +55,16 @@
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end">
                                                             <li>
-                                                                <a class="dropdown-item edit-item-btn" href="{{route('user.add',[$user->id])}}"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Modifier</a>
+                                                                <a class="dropdown-item edit-item-btn" href="{{route('indicator.add',['ajouter',$category->id])}}"><i class="ri-add-fill align-bottom me-2 text-muted"></i> Ajouter un indicateurs</a>
                                                             </li>
                                                             <li>
-                                                                <a href="javascript:void(0);" onclick="deleted('{{$user->id}}','{{route('user.delete')}}')" class="dropdown-item remove-item-btn">
+                                                                <a class="dropdown-item edit-item-btn" href="{{route('indicator.index',[$category->id])}}"><i class="ri-search-line align-bottom me-2 text-muted"></i> Lise des indicateurs</a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item edit-item-btn" href="{{route('category.add',[$category->id])}}"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Modifier la catégorie d'indicateur</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="javascript:void(0);" onclick="deleted('{{$category->id}}','{{route('category.delete')}}')" class="dropdown-item remove-item-btn">
                                                                     <i class="ri-delete-bin-fill align-bottom me-2 text-muted" ></i> Supprimer
                                                                 </a>
                                                             </li>
@@ -78,18 +78,18 @@
                             </div>
                             <div>
                                 <ul class="pagination pagination-separated justify-content-center mb-0">
-                                    @if ($users->onFirstPage())
+                                    @if ($categories->onFirstPage())
                                         <li class="page-item disabled">
                                             <span class="page-link"><i class="mdi mdi-chevron-left"></i></span>
                                         </li>
                                     @else
                                         <li class="page-item">
-                                            <a href="{{ $users->previousPageUrl() }}" class="page-link" rel="prev"><i class="mdi mdi-chevron-left"></i></a>
+                                            <a href="{{ $categories->previousPageUrl() }}" class="page-link" rel="prev"><i class="mdi mdi-chevron-left"></i></a>
                                         </li>
                                     @endif
                         
-                                    @foreach ($users->getUrlRange(1, $users->lastPage()) as $page => $url)
-                                        @if ($page == $users->currentPage())
+                                    @foreach ($categories->getUrlRange(1, $categories->lastPage()) as $page => $url)
+                                        @if ($page == $categories->currentPage())
                                             <li class="page-item active">
                                                 <span class="page-link">{{ $page }}</span>
                                             </li>
@@ -100,9 +100,9 @@
                                         @endif
                                     @endforeach
                         
-                                    @if ($users->hasMorePages())
+                                    @if ($categories->hasMorePages())
                                         <li class="page-item">
-                                            <a href="{{ $users->nextPageUrl() }}" class="page-link" rel="next"><i class="mdi mdi-chevron-right"></i></a>
+                                            <a href="{{ $categories->nextPageUrl() }}" class="page-link" rel="next"><i class="mdi mdi-chevron-right"></i></a>
                                         </li>
                                     @else
                                         <li class="page-item disabled">

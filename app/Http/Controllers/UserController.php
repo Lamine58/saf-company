@@ -5,13 +5,14 @@
     use Illuminate\Http\Request;
     use App\Models\User;
     use App\Models\Business;
+    use App\Models\Zone;
     use Illuminate\Support\Facades\Auth;
 
     class UserController extends Controller
     {
         public function index()
         {
-            if(Auth::user()->account=='ADMINITRATEUR' || Auth::user()->account=='MINISTERE'){
+            if(Auth::user()->account=='ADMINISTRATEUR' || Auth::user()->account=='MINISTERE'){
                 $users = User::paginate(10);
             }else{
                 $users = User::where('business_id',Auth::user()->business_id)->paginate(10);
@@ -30,9 +31,10 @@
                 $user = new User;
                 $title = 'Ajouter un utilisateur';
             }
-
+            
             $businesses = Business::all();
-            return view('user.save',compact('user','title','businesses'));
+            $zones = Zone::all();
+            return view('user.save',compact('user','title','businesses','zones'));
         }
 
 
@@ -53,8 +55,9 @@
             
             $data = $request->except(['avatar']);
             $user = User::where('email', $data['email'])->where('id', '!=', $request->id)->first();
-            
-            $data['user_id'] = Auth::user()->id ?? null;
+
+            $data['business_id'] = $request->account=='ADMINISTRATEUR' ? null : $data['business_id'];
+            $data['zone_id'] = $request->account=='ENQUETEUR' ? $data['zone_id'] : null;
 
             if ($user) {
                 return response()->json(['message' => 'L\'adresse e-mail est déjà utilisée.',"status"=>"error"]);

@@ -17,7 +17,7 @@
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Etablissements</a></li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Fournisseurs</a></li>
                                     <li class="breadcrumb-item active">{{$title}}</li>
                                 </ol>
                             </div>
@@ -45,21 +45,21 @@
                                                     <div >
                                                         <label class="form-label">Type de compte</label>
                                                         <select name="account" id="account" class="form-control">
-                                                            @if(Auth::user()->account=='ADMINITRATEUR' || Auth::user()->account=='MINISTERE')
-                                                                <option {{$user->account=="ADMINITRATEUR" ? 'selected' : ''}} >ADMINITRATEUR</option>
+                                                            @if(Auth::user()->account=='ADMINISTRATEUR' || Auth::user()->account=='MINISTERE')
+                                                                <option {{$user->account=="ADMINISTRATEUR" ? 'selected' : ''}} >ADMINISTRATEUR</option>
                                                                 <option {{$user->account=="MINISTERE" ? 'selected' : ''}}>MINISTERE</option>
-                                                                <option {{$user->account=="ETABLISSEMENT" ? 'selected' : ''}}>ETABLISSEMENT</option>
+                                                                <option {{$user->account=="FOURNISSEUR" ? 'selected' : ''}}>FOURNISSEUR</option>
                                                                 <option {{$user->account=="ENQUETEUR" ? 'selected' : ''}}>ENQUETEUR</option>
                                                             @else
-                                                                <option {{$user->account=="ETABLISSEMENT" ? 'selected' : ''}}>ETABLISSEMENT</option>
+                                                                <option {{$user->account=="FOURNISSEUR" ? 'selected' : ''}}>FOURNISSEUR</option>
                                                                 <option {{$user->account=="ENQUETEUR" ? 'selected' : ''}}>ENQUETEUR</option>
                                                             @endif
                                                         </select>
                                                     </div>
         
-                                                    @if(Auth::user()->account=='ADMINITRATEUR' || Auth::user()->account=='MINISTERE')
-                                                        <div  class="mt-3 hidden business">
-                                                            <label class="form-label">Etablissement</label>
+                                                    @if(Auth::user()->account=='ADMINISTRATEUR' || Auth::user()->account=='MINISTERE')
+                                                        <div  class="mt-3 {{$user->business_id==null ? 'hidden' : '' }} business">
+                                                            <label class="form-label">Fournisseur</label>
                                                             <select id="business_id" class="form-control" name="business_id"> 
                                                                 @foreach($businesses as $business)
                                                                     <option value="{{$business->id}}" {{$business->id==$user->business_id ? 'selected' : ''}} >{{$business->legal_name}}</option>
@@ -69,6 +69,16 @@
                                                     @else
                                                         <input type="hidden" name="business_id" value="{{Auth::user()->business_id}}">
                                                     @endif
+
+                                                    
+                                                    <div  class="mt-3 {{$user->account=='ENQUETEUR' ? '' : 'hidden' }} query">
+                                                        <label class="form-label">Zone</label>
+                                                        <select id="zone_id" class="form-control" name="zone_id"> 
+                                                            @foreach($zones as $zone)
+                                                                <option value="{{$zone->id}}" {{$zone->id==$user->zone_id ? 'selected' : ''}} >{{$zone->name}} - {{$zone->departement}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
         
                                                     <div class="mt-3">
                                                         <label class="form-label">Email</label>
@@ -94,7 +104,7 @@
                                                     </div>
                                                     <br>
                                                 </div>
-                                                <div class="col-lg-12 row">
+                                                <div class="col-lg-12 row mt-2">
                                                     <h4><small>Accès</small></h4>
                                                     <hr>
                                                     <div class="col-lg-6">
@@ -140,10 +150,16 @@
 
         $('#account').on('change',()=>{
 
-            if($('#account').val()=='ETABLISSEMENT' || $('#account').val()=='ENQUETEUR'){
+            if($('#account').val()=='FOURNISSEUR' || $('#account').val()=='ENQUETEUR'){
                 $('.business').removeClass('hidden');
             }else{
                 $('.business').addClass('hidden');
+            }
+
+            if($('#account').val()=='ENQUETEUR'){
+                $('.query').removeClass('hidden');
+            }else{
+                $('.query').addClass('hidden');
             }
 
         });

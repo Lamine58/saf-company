@@ -23,7 +23,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->uuid('user_id')->index()->nullable(); // Nullable assuming this is a reference to another user
-            $table->uuid('business_id')->index(); 
+            $table->uuid('business_id')->nullable(); 
+            $table->uuid('zone_id')->nullable(); 
             $table->rememberToken();
             $table->timestamps();
         });

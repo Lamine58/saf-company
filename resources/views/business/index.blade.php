@@ -17,7 +17,7 @@
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Etablissements</a></li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Fournisseurs</a></li>
                                     <li class="breadcrumb-item active">Liste des etablissements</li>
                                 </ol>
                             </div>

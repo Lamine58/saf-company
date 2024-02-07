@@ -60,4 +60,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Business::class);
     }
+    
+    public function zone()
+    {
+        return $this->belongsTo(Zone::class);
+    }
 }

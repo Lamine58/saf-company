@@ -17,7 +17,7 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         
-        if (Auth::check() && (Auth::user()->account === 'ADMINITRATEUR' || Auth::user()->account === 'MINISTERE')) {
+        if (Auth::check() && (Auth::user()->account === 'ADMINISTRATEUR' || Auth::user()->account === 'MINISTERE')) {
             return $next($request);
         }
 

@@ -36,7 +36,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label" for="password-input">Mot de passe <span class="text-danger">*</span></label>
                                                 <div class="position-relative auth-pass-inputgroup">
-                                                    <input type="password" name="password" required class="form-control pe-5 password-input" >
+                                                    <input placeholder="Mot de passe" type="password" name="password" required class="form-control pe-5 password-input" >
                                                     <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
                                                 </div>
                                             </div>

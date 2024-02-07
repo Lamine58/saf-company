@@ -40,25 +40,13 @@
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#">
-                        <i class="ri-pages-line"></i> <span data-key="t-dashboards">Campagne</span>
-                    </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#">
-                        <i class="ri-pages-line"></i> <span data-key="t-dashboards">Departements</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#">
                         <i class="ri-pages-line"></i> <span data-key="t-dashboards">Historique des enquêtes</span>
                     </a>
                 </li>
                 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Enquêtes</span>
+                        <i class="ri-search-2-line"></i> <span data-key="t-apps">Enquêtes</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarApps">
                         <ul class="nav nav-sm flex-column">
@@ -74,10 +62,65 @@
                         </ul>
                     </div>
                 </li>
-                @if(Auth::user()->account=='ADMINITRATEUR' || Auth::user()->account=='MINISTERE')
+                
+                @if(Auth::user()->account=='ADMINISTRATEUR' || Auth::user()->account=='MINISTERE')
+          
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('method.index')}}">
+                            <i class="ri-file-search-line"></i> <span data-key="t-dashboards">Méthodes de collecte des données</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('unity.index')}}">
+                            <i class="ri-router-line"></i> <span data-key="t-dashboards">Unités de mesures</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('periodicity.index')}}">
+                            <i class="ri-time-line"></i> <span data-key="t-dashboards">Periodicités</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sidebarCategorie" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCategorie">
+                            <i class="ri-apps-2-line"></i> <span data-key="t-apps">Categories des indicateurs</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="sidebarCategorie">
+                            <ul class="nav nav-sm flex-column" >
+                                <li class="nav-item">
+                                    <a href="{{route("category.add",['ajouter'])}}" class="nav-link" data-key="t-calendar"> Ajouter </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route("category.index")}}" class="nav-link" data-key="t-calendar"> Liste </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                          
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sidebarZone" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarZone">
+                            <i class="ri-map-pin-line"></i> <span data-key="t-apps">Zones</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="sidebarZone">
+                            <ul class="nav nav-sm flex-column" >
+                                <li class="nav-item">
+                                    <a href="{{route("zone.add",['ajouter'])}}" class="nav-link" data-key="t-calendar"> Ajouter </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route("zone.index")}}" class="nav-link" data-key="t-calendar"> Liste </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                @endif
+                
+                @if(Auth::user()->account=='ADMINISTRATEUR' || Auth::user()->account=='MINISTERE')
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarBusiness" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuth">
-                            <i class="ri-building-line"></i> <span data-key="t-authentication">Etablissements</span>
+                            <i class="ri-building-line"></i> <span data-key="t-authentication">Fournisseurs</span>
                         </a>
                         <div class="collapse menu-dropdown" id="sidebarBusiness">
                             <ul class="nav nav-sm flex-column" >

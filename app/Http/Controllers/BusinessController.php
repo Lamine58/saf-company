@@ -60,7 +60,7 @@
                 );
             }
             
-            return response()->json(['message' => 'Etablissement enregistré avec succès',"status"=>"success"]);
+            return response()->json(['message' => 'Fournisseur enregistré avec succès',"status"=>"success"]);
 
         }
 
@@ -69,7 +69,7 @@
             $business = Business::find($request->id);
 
             if($business->delete()){
-                return response()->json(['message' => 'Etablissement supprimé avec succès',"status"=>"success"]);
+                return response()->json(['message' => 'Fournisseur supprimé avec succès',"status"=>"success"]);
             }else{
                 return response()->json(['message' => 'Echec de la suppression veuillez réessayer',"status"=>"error"]);
             }

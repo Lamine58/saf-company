@@ -17,7 +17,7 @@
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Fournisseurs</a></li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Zones</a></li>
                                     <li class="breadcrumb-item active">{{$title}}</li>
                                 </ol>
                             </div>
@@ -26,46 +26,33 @@
                     </div>
                 </div>
 
-                <form action="{{route('business.save')}}" class="add_business">
+                <form action="{{route('zone.save')}}" class="add_zone">
                     @csrf
-                    <input type="hidden" name="id" value="{{$business->id}}">
+                    <input type="hidden" name="id" value="{{$zone->id}}">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-2">
-                                            <input type="file" name="logo" class="dropify-logo" data-default-file="{{$business->logo!=null ? Storage::url($business->logo) : ''}}">
-                                        </div>
-                                        <div class="col-md-10">
+                                        <div class="col-md-12">
                                             <div class="row g-3">
     
                                                 <div class="col-lg-6">
-    
-                                                    <div>
-                                                        <label class="form-label">Raison sociale</label>
-                                                        <input type="text" name="legal_name" value="{{$business->legal_name}}" required class="form-control rounded-end" />
-                                                    </div>
-    
-                                                    <div  class="mt-1">
-                                                        <label class="form-label">Téléphone</label>
-                                                        <input type="text" name="phone" value="{{$business->phone}}"class="form-control phone rounded-end" />
-                                                    </div>
+                                                    <label class="form-label">Zone</label>
+                                                    <input type="text" name="name" value="{{$zone->name}}" required class="form-control rounded-end" />
                                                 </div>
                                                 <div class="col-lg-6">
-    
+                                                    <label class="form-label">Dapartement</label>
+                                                    <input type="text" name="departement" value="{{$zone->departement}}" class="form-control rounded-end" />
+                                                </div>
+                                                <div class="col-lg-6">
                                                     <div>
-                                                        <label class="form-label">Email</label>
-                                                        <input type="text" name="email" value="{{$business->email}}"class="form-control rounded-end" />
-                                                    </div>
-    
-                                                    <div  class="mt-1">
-                                                        <label class="form-label">Localisation</label>
-                                                        <input type="text" name="location" value="{{$business->location}}"class="form-control rounded-end" />
+                                                        <label class="form-label">Description</label>
+                                                        <textarea name="description" id="description" class="form-control rounded-end" name="description" rows="5">{{$zone->description}}</textarea>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12">
-                                                    <button id="add_business" class="btn btn-primary btn-block" style="width:100%">Enregistrer</button>
+                                                    <button id="add_zone" class="btn btn-primary btn-block" style="width:100%">Enregistrer</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -95,14 +82,14 @@
 
     <script>
 
-        $('.add_business').submit(function(e){
+        $('.add_zone').submit(function(e){
 
             e.preventDefault();
 
             var form = new FormData($(this)[0]);
 
-            var buttonDefault = $('#add_business').text();
-            var button = $('#add_business');
+            var buttonDefault = $('#add_zone').text();
+            var button = $('#add_zone');
 
             button.attr('disabled',true);
             button.text('Veuillez patienter ...');
@@ -129,7 +116,7 @@
                             backgroundColor: "#4CAF50", // green
                         }).showToast();
 
-                        window.location='{{route("business.index")}}'
+                        window.location='{{route("zone.index")}}'
                     }else{
                         Toastify({
                             text: result.message,
