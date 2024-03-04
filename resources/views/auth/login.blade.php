@@ -41,9 +41,9 @@
                                                 </div>
                                             </div>
         
-                                            <div class="mb-4">
+                                            <!-- <div class="mb-4">
                                                 <p class="mb-0 fs-12 text-muted"><a href="">Mot de passe oublié?</a></p>
-                                            </div>
+                                            </div> -->
         
                                             <div class="mt-4">
                                                 <button class="btn btn-success w-100" id="user_login" style="background: #e35310;border-color: #e35310;" type="submit">Connexion</button>

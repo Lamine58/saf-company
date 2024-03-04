@@ -31,7 +31,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <a class="btn btn-primary" href="{{route('indicator.add',['ajouter',$category->id])}}"><i class="ri-add-fill"></i> Ajouter un indicateur</a>
-                                <table id="table" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
+                                <table id="table" class="table table-bordered dt-responsive  table-striped align-middle" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>Indicateur</th>

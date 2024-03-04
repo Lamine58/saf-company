@@ -21,6 +21,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('v1')->group(function () {
+
+    #get
+    Route::post('/categories', [ApiController::class, 'categories']);
+
+    #post
     Route::post('/login', [AuthController::class, 'login']);
-    Route::get('/users', [ApiController::class, 'users']);
+    Route::post('/add-investigation', [ApiController::class, 'add_investigation']);
+
 });
