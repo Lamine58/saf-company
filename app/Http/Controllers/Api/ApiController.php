@@ -17,6 +17,20 @@
             // $this->middleware('authorization');
         }
 
+        public function investigations(Request $request)
+        {
+            $investigations = Investigation::with('indicator')
+            ->where('user_id', $request->user_id)
+            ->where('state', $request->state)
+            ->get();
+            
+            return response()->json([
+                'status'=>"success",
+                'investigations'=>$investigations,
+            ], 200);
+
+        }
+
         public function categories(Request $request)
         {
 
@@ -38,10 +52,10 @@
             }
 
             $categories = Category::with('indicators')->get();
-            $investigations = Investigation::where('user_id',$request->user_id)->get();
-            // $investigations_success = Investigation::where('user_id',$request->user_id)->where('state','success')->get();
-            // $investigations_wait = Investigation::where('user_id',$request->user_id)->where('state','pending')->get();
-            // $investigations_faild = Investigation::where('user_id',$request->user_id)->where('state','faild')->get();
+            $investigations = Investigation::with('indicator')->where('user_id',$request->user_id)->orderBy('created_at', 'desc')->get();
+            $investigations_success = Investigation::with('indicator')->where('user_id',$request->user_id)->where('state','success')->orderBy('created_at', 'desc')->get();
+            $investigations_wait = Investigation::with('indicator')->where('user_id',$request->user_id)->where('state','pending')->orderBy('created_at', 'desc')->get();
+            $investigations_faild = Investigation::with('indicator')->where('user_id',$request->user_id)->where('state','faild')->orderBy('created_at', 'desc')->get();
 
             $formattedData = [];
             foreach ($categories as $category) {
@@ -64,14 +78,42 @@
                 'data'=>$formattedData,
                 'status'=>"success",
                 'investigations'=>$investigations->count(),
-                // 'investigations_success'=>$investigations_success,
-                // 'investigations_wait'=>$investigations_wait,
-                // 'investigations_faild'=>$investigations_faild
+                'investigations_all'=>$investigations,
+                'investigations_success'=>$investigations_success,
+                'investigations_wait'=>$investigations_wait,
+                'investigations_faild'=>$investigations_faild
             ], 200);
 
         }
 
-        
+        public function update_investigation(Request $request)
+        {
+            $validator = Validator::make($request->all(), [
+                'id' => 'required',
+                'value' => 'required',
+                'indicator_id' => 'required',
+                'user_id' => 'required',
+                'date' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->errors()], 401);
+            }
+
+            $investigation = Investigation::find($request->id);
+            $investigation->value = $request->value;
+            $investigation->date = $request->date;
+            $investigation->state = 'pending';
+
+            if ($investigation->save()) {
+
+                return response()->json(['message' => 'Enquête modifié avec succès', 'status' => 'success'], 200);
+
+            } else {
+                return response()->json(["message"=>"Echec de la modification veuillez réessayer","status"=>"error"], 401);
+            }
+        }
+
         public function add_investigation(Request $request)
         {
             $validator = Validator::make($request->all(), [

@@ -30,10 +30,9 @@ class Investigation extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function indicators()
+    
+    public function indicator()
     {
-        return $this->hasMany(Indicator::class);
+        return $this->belongsTo(Indicator::class);
     }
-
 }

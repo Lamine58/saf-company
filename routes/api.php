@@ -23,10 +23,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('v1')->group(function () {
 
     #get
-    Route::post('/categories', [ApiController::class, 'categories']);
+    Route::get('/investigations', [ApiController::class, 'investigations']);
 
     #post
     Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/categories', [ApiController::class, 'categories']);
     Route::post('/add-investigation', [ApiController::class, 'add_investigation']);
+    Route::post('/update-investigation', [ApiController::class, 'update_investigation']);
 
 });
