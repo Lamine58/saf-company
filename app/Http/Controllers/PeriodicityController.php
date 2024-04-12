@@ -10,12 +10,17 @@
     {
         public function index()
         {
+
+            Auth::user()->access('LISTE PERIODICITE');
+
             $periodicities = Periodicity::paginate(10);
             return view('periodicity.index',compact('periodicities'));
         }
 
         public function save(Request $request)
         {
+
+            Auth::user()->access('AJOUT PERIODICITE');
 
             $validator = $request->validate([
                 'name' => 'required|string',
@@ -38,6 +43,8 @@
         }
 
         public function delete(Request $request){
+
+            Auth::user()->access('SUPPRESSION PERIODICITE');
 
             $periodicity = Periodicity::find($request->id);
 

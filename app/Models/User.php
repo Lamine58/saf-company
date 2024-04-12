@@ -56,13 +56,33 @@ class User extends Authenticatable
         });
     }
 
-    public function business()
+    public function role()
     {
-        return $this->belongsTo(Business::class);
+        return $this->belongsTo(Role::class);
     }
-    
-    public function zone()
+
+    public function departement()
     {
-        return $this->belongsTo(Zone::class);
+        return $this->belongsTo(Departement::class);
+    }
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class);
+    }
+
+    public function permission($permission)
+    {
+       if (!$this->role) {
+            return false;
+        }
+        return $this->role->permissions()->where('name', $permission)->exists();
+    }
+
+    public function access($permission)
+    {
+       if (!$this->role || !$this->role->permissions()->where('name', $permission)->exists()) {
+            abort(403);
+        }
     }
 }

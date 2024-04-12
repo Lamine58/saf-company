@@ -13,24 +13,25 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->string('matricule');
             $table->string('avatar')->nullable();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone');
-            $table->string('role')->nullable();
-            $table->string('account');
+            $table->string('role_id');
+            $table->string('region_id')->nullable();
+            $table->string('departement_id')->nullable();
+            $table->string('fonction');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->uuid('user_id')->index()->nullable(); // Nullable assuming this is a reference to another user
-            $table->uuid('business_id')->nullable(); 
-            $table->uuid('zone_id')->nullable(); 
+            $table->uuid('user_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
         
         Schema::table('users', function (Blueprint $table) {
-            $table->foreign('business_id')->references('id')->on('businesses')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

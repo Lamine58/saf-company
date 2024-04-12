@@ -5,19 +5,17 @@
     use Illuminate\Http\Request;
     use App\Models\User;
     use App\Models\Business;
-    use App\Models\Zone;
+    use App\Models\Role;
+    use App\Models\Region;
     use Illuminate\Support\Facades\Auth;
 
     class UserController extends Controller
     {
         public function index()
         {
-            if(Auth::user()->account=='ADMINISTRATEUR' || Auth::user()->account=='MINISTERE'){
-                $users = User::paginate(10);
-            }else{
-                $users = User::where('business_id',Auth::user()->business_id)->paginate(10);
-            }
+            Auth::user()->access('LISTE UTILISATEUR');
             
+            $users = User::paginate(100);
             return view('user.index',compact('users'));
         }
 
@@ -27,14 +25,19 @@
 
             if(!is_null($user)){
                 $title = "Modifier $user->fist_name $user->last_name";
+
+                Auth::user()->access('EDITION UTILISATEUR');
             }else{
                 $user = new User;
                 $title = 'Ajouter un utilisateur';
+
+                Auth::user()->access('AJOUT UTILISATEUR');
             }
             
-            $businesses = Business::all();
-            $zones = Zone::all();
-            return view('user.save',compact('user','title','businesses','zones'));
+            $departements = [];
+            $reigons = Region::all();
+            $roles = Role::all();
+            return view('user.save',compact('user','title','departements','reigons','roles'));
         }
 
 
@@ -43,9 +46,15 @@
         public function save(Request $request)
         {
             
+            if($request->id){
+                Auth::user()->access('EDITION UTILISATEUR');
+            }else{
+                Auth::user()->access('AJOUT UTILISATEUR');
+            }
+
             $validator = $request->validate([
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-                'account' => 'required|string',
+                'matricule' => 'required|string',
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'phone' => 'required|string',
@@ -55,9 +64,6 @@
             
             $data = $request->except(['avatar']);
             $user = User::where('email', $data['email'])->where('id', '!=', $request->id)->first();
-
-            $data['business_id'] = $request->account=='ADMINISTRATEUR' ? null : $data['business_id'];
-            $data['zone_id'] = $request->account=='ENQUETEUR' ? $data['zone_id'] : null;
 
             if ($user) {
                 return response()->json(['message' => 'L\'adresse e-mail est déjà utilisée.',"status"=>"error"]);
@@ -89,6 +95,8 @@
         }
 
         public function delete(Request $request){
+
+            Auth::user()->access('SUPPRESSION UTILISATEUR');
 
             $user = User::find($request->id);
 

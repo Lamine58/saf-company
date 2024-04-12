@@ -106,7 +106,7 @@
                             backgroundColor: "#4CAF50", // green
                         }).showToast();
 
-                        window.location='{{route("user.index")}}'
+                        window.location='{{route("dashboard")}}'
                     }else{
                         Toastify({
                             text: result.message,

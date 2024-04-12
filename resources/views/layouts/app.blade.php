@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="{{asset("cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css")}}" />
     <link rel="stylesheet" href="{{asset("cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css")}}" />
     <link rel="stylesheet" href="{{asset("cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css")}}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     @yield('css-link')
 
@@ -71,6 +72,49 @@
     }
     .hidden{
         display: none;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: 37px;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        padding: 5px 14px;
+    }
+    .select2-container--default .select2-selection--single {
+        border: 1px solid #ced4da;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        top: 7px;
+        right: 5px;
+    }
+    .select2-container--default .select2-selection--multiple {
+        background-color: white;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        cursor: text;
+        padding-bottom: 5px;
+        padding-right: 5px;
+        min-height: 36px;
+        position: relative;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        background-color: #405189;
+        border: 1px solid #405189;
+        border-radius: 3px;
+        margin-left: 5px;
+        margin-top: 7px;
+        padding: 0;
+        padding-left: 20px;
+        position: relative;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: bottom;
+        white-space: nowrap;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+        border-right: 1px solid #405189;
+        color: #fff;
     }
 </style>
 
@@ -164,10 +208,14 @@
     <link href="{{asset('assets/libs/sweetalert2/sweetalert2.min.css')}}" rel="stylesheet" type="text/css" />
     <script src="{{asset('assets/libs/sweetalert2/sweetalert2.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js" integrity="sha512-efAcjYoYT0sXxQRtxGY37CKYmqsFVOIwMApaEbrxJr4RwqVVGw8o+Lfh/+59TU07+suZn1BWq4fDl5fdgyCNkw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js" integrity="sha512-8QFTrG0oeOiyWo/VM9Y8kgxdlCryqhIxVeRpWSezdRRAvarxVtwLnGroJgnVW9/XBRduxO/z1GblzPrMQoeuew==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
+
+
+        $('select').select2();
+
         $('.phone').inputmask('225 9999999999', { placeholder: '' });
         $('.dropify-logo').dropify({
             messages: {

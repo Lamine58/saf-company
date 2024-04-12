@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">Liste des indicateurs {{$category->name}}</h4>
+                            <h4 class="mb-sm-0">Liste des quesions : {{$quizze->value_chain->name}} {{$quizze->category->name}}</h4>
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
@@ -30,12 +30,13 @@
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
-                                <a class="btn btn-primary" href="{{route('indicator.add',['ajouter',$category->id])}}"><i class="ri-add-fill"></i> Ajouter un indicateur</a>
+                                @if(Auth::user()->permission('AJOUT QUESTION'))
+                                    <a class="btn btn-primary" href="{{route('indicator.add',['ajouter',$quizze->id])}}"><i class="ri-add-fill"></i> Ajouter une question</a>
+                                @endif
                                 <table id="table" class="table table-bordered dt-responsive  table-striped align-middle" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>Indicateur</th>
-                                            <th>Définition</th>
+                                            <th>Question</th>
                                             <th>Type de reponse</th>
                                             <th>Méthode de collect</th>
                                             <th>Unité</th>
@@ -47,8 +48,7 @@
                                     <tbody>
                                         @foreach ($indicators as $indicator)
                                             <tr>
-                                                <td>{{$indicator->indicator}}</td>
-                                                <td>{{$indicator->definition}}</td>
+                                                <td>{{$indicator->question}}</td>
                                                 <td>{{$indicator->type}}</td>
                                                 <td>{{$indicator->method->name}}</td>
                                                 <td>{{$indicator->unity->name}}</td>
@@ -61,14 +61,18 @@
                                                             <i class="ri-more-fill align-middle"></i>
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end">
-                                                            <li>
-                                                                <a class="dropdown-item edit-item-btn" href="{{route('indicator.add',[$indicator->id,$indicator->categorie_id])}}"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Modifier</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0);" onclick="deleted('{{$indicator->id}}','{{route('indicator.delete')}}')" class="dropdown-item remove-item-btn">
-                                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted" ></i> Supprimer
-                                                                </a>
-                                                            </li>
+                                                             @if(Auth::user()->permission('EDITION QUESTION'))
+                                                                <li>
+                                                                    <a class="dropdown-item edit-item-btn" href="{{route('indicator.add',[$indicator->id,$indicator->quizze_id])}}"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Modifier</a>
+                                                                </li>
+                                                            @endif
+                                                            @if(Auth::user()->permission('SUPPRESSION QUESTION'))
+                                                                <li>
+                                                                    <a href="javascript:void(0);" onclick="deleted('{{$indicator->id}}','{{route('indicator.delete')}}')" class="dropdown-item remove-item-btn">
+                                                                        <i class="ri-delete-bin-fill align-bottom me-2 text-muted" ></i> Supprimer
+                                                                    </a>
+                                                                </li>
+                                                            @endif
                                                         </ul>
                                                     </div>
                                                 </td>

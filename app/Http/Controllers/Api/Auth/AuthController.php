@@ -26,15 +26,19 @@
 
             if (Auth::attempt($credentials)) {
 
-                if(Auth::user()->account == 'ENQUETEUR'){
+                if(Auth::user()->permission('COLLECTE DE DONNEES')){
 
                     $token = auth()->user()->createToken('auth.user',['*'],Carbon::now()->addhours(1))->accessToken;
                     $user = Auth::user();
-
+                    $user->role;
+                    $user->departement;
                     return response()->json(["user"=>$user,"token"=>$token->token,"status"=>"success"], 200);
+
                 }else{
+
                     Auth::logout();
-                    return response()->json(['message' => 'Identifiants invalides', 'status' => 'error'], 401);
+                    return response()->json(['message' => "Vous n'avez pas la permission pour la collecte de données", 'status' => 'error'], 401);
+
                 }
 
             } else {

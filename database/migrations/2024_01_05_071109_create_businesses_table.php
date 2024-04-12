@@ -9,7 +9,9 @@ class CreateBusinessesTable extends Migration
     public function up()
     {
         Schema::create('businesses', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id')->primary(); 
+            $table->uuid('region_id')->index(); 
+            $table->uuid('departement_id')->index();
             $table->string('logo')->nullable();
             $table->string('legal_name');
             $table->string('phone');
@@ -17,6 +19,7 @@ class CreateBusinessesTable extends Migration
             $table->string('email')->unique();
             $table->uuid('user_id')->index(); 
             $table->timestamps();
+
         });
 
         Schema::table('businesses', function (Blueprint $table) {

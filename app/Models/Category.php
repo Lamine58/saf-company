@@ -31,9 +31,9 @@ class Category extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function indicators()
+    public function value_chain()
     {
-        return $this->hasMany(Indicator::class,'categorie_id');
+        return $this->hasMany(Quizze::class);
     }
 
 }

@@ -34,12 +34,12 @@
                                     <thead>
                                         <tr>
                                             <th></th>
+                                            <th>Matricule</th>
                                             <th>Nom et prénom</th>
                                             <th>Téléphone</th>
                                             <th>Email</th>
                                             <th>Type de compte</th>
-                                            <th>Fournisseur</th>
-                                            <th>Zone</th>
+                                            <th>Région</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -47,29 +47,32 @@
                                         @foreach ($users as $user)
                                             <tr>
                                                 <td><img width="50" src="{{ $user->avatar!='' ? Storage::url($user->avatar) : asset('/images/user.jpeg')}}" alt=""></td>
+                                                <td>{{$user->matricule}}</td>
                                                 <td>{{$user->first_name}} {{$user->last_name}}</td>
                                                 <td>{{$user->phone}}</td>
                                                 <td>{{$user->email}}</td>
-                                                <td>{{$user->account}}</td>
-                                                <td>{{$user->business->legal_name ?? ''}}</td>
-                                                <td>{{$user->zone->name ?? ''}}</td>
+                                                <td>{{$user->role->name}}</td>
+                                                <td>{{$user->region->name ?? ''}}</td>
                                                 <td>
-                                                    
-                                                    <div class="dropdown d-inline-block">
+                                                    @if(Auth::user()->permission('EDITION UTILISATEUR') || Auth::user()->permission('SUPPRESSION UTILISATEUR'))
                                                         <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="ri-more-fill align-middle"></i>
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end">
-                                                            <li>
-                                                                <a class="dropdown-item edit-item-btn" href="{{route('user.add',[$user->id])}}"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Modifier</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0);" onclick="deleted('{{$user->id}}','{{route('user.delete')}}')" class="dropdown-item remove-item-btn">
-                                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted" ></i> Supprimer
-                                                                </a>
-                                                            </li>
+                                                            @if(Auth::user()->permission('EDITION UTILISATEUR'))
+                                                                <li>
+                                                                    <a class="dropdown-item edit-item-btn" href="{{route('user.add',[$user->id])}}"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Modifier</a>
+                                                                </li>
+                                                            @endif
+                                                            @if(Auth::user()->permission('SUPPRESSION UTILISATEUR'))
+                                                                <li>
+                                                                    <a href="javascript:void(0);" onclick="deleted('{{$user->id}}','{{route('user.delete')}}')" class="dropdown-item remove-item-btn">
+                                                                        <i class="ri-delete-bin-fill align-bottom me-2 text-muted" ></i> Supprimer
+                                                                    </a>
+                                                                </li>
+                                                            @endif
                                                         </ul>
-                                                    </div>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

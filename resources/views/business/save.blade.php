@@ -51,18 +51,58 @@
                                                         <label class="form-label">Téléphone</label>
                                                         <input type="text" name="phone" value="{{$business->phone}}"class="form-control phone rounded-end" />
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-6">
-    
-                                                    <div>
+
+                                                    <div class="mt-2">  
                                                         <label class="form-label">Email</label>
                                                         <input type="text" name="email" value="{{$business->email}}"class="form-control rounded-end" />
                                                     </div>
     
-                                                    <div  class="mt-1">
+                                                    <div  class="mt-2">
                                                         <label class="form-label">Localisation</label>
                                                         <input type="text" name="location" value="{{$business->location}}"class="form-control rounded-end" />
                                                     </div>
+
+                                                </div>
+                                                <div class="col-lg-6">
+
+                                                    <div>
+                                                        <label class="form-label">Sélectionner les catégories du fournisseur</label>
+                                                        <select id="category_id" multiple class="form-control select2 select2-tags" name="category_id[]" required> 
+                                                            @foreach($categories as $category)
+                                                                <option value="{{$category->id}}" {{ $business->categories->contains($category->id) ? 'selected' : '' }} >{{$category->name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="mt-1">
+                                                        <label class="form-label">Sélectionner les chaîne de valeur du fournisseur</label>
+                                                        <select id="quizze_id" multiple class="form-control select2-tags" name="quizze_id[]" required> 
+                                                            @foreach($business->quizzes as $quizze)
+                                                                <option value="{{$quizze->id}}"  selected >{{$quizze->value_chain->name}} {{$quizze->category->name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="mt-2">
+                                                        <label class="form-label">Région</label>
+                                                        <select id="region_id" class="form-control select2" name="region_id">
+                                                            <option value="">Selectionner la région</option>
+                                                            @foreach($reigons as $reigon)
+                                                                <option value="{{$reigon->id}}" {{$reigon->id==$business->region_id ? 'selected' : ''}} >{{$reigon->name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <div  class="mt-2">
+                                                        <label class="form-label">Département</label>
+                                                        <select id="departement_id" class="form-control select2" name="departement_id"> 
+                                                            <option value="">Sélectionner le département</option>
+                                                            @foreach(($business->region->departements ?? $departements) as $departement)
+                                                                <option value="{{$departement->id}}" {{$departement->id==$business->departement_id ? 'selected' : ''}} >{{$departement->name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+    
                                                 </div>
                                                 <div class="col-lg-12">
                                                     <button id="add_business" class="btn btn-primary btn-block" style="width:100%">Enregistrer</button>
@@ -94,6 +134,63 @@
 @section('script')
 
     <script>
+
+        $('#category_id').on('change',function(){
+
+            var category_id = $(this).val();
+
+            if(category_id!=''){
+
+                $.ajax({
+                    url: '/categories/' + category_id,
+                    type: 'GET',
+                    success: function(response) {
+
+                        $('#quizze_id').select2('destroy');
+
+                        var options = '';
+                        $.each(response, function(index, quizze) {
+                            options += '<option value="' + quizze.id + '">' + quizze.name + '</option>';
+                        });
+
+                        $('#quizze_id').html(options);
+                        $('#quizze_id').select2();
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            }
+            
+        });
+
+
+
+        $('#region_id').on('change',function(){
+
+            var regionId = $(this).val();
+
+            $.ajax({
+                url: '/regions/' + regionId + '/departements',
+                type: 'GET',
+                success: function(response) {
+
+                    $('#departement_id').select2('destroy');
+
+                    var options = '';
+                    $.each(response, function(index, departement) {
+                        options += '<option value="' + departement.id + '">' + departement.name + '</option>';
+                    });
+                    $('#departement_id').html(options);
+                    $('#departement_id').select2();
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+            
+        });
 
         $('.add_business').submit(function(e){
 

@@ -33,9 +33,8 @@
                                 <table id="table" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>Categories indicateurs</th>
+                                            <th>Categories</th>
                                             <th>Description</th>
-                                            <th>Total des indicateurs</th>
                                             <th>Administrateur</th>
                                             <th>Action</th>
                                         </tr>
@@ -45,29 +44,28 @@
                                             <tr>
                                                 <td>{{$category->name}}</td>
                                                 <td>{{$category->description}}</td>
-                                                <td>{{$category->indicators->count()}}</td>
                                                 <td>{{$category->user->first_name}} {{$category->user->last_name}}</td>
                                                 <td>
-                                                    
+                                                    @if(Auth::user()->permission("LISTE CHAINE DE VALEUR D'UNE CATEGORIE"))
+                                                        <a href="{{route('quizze.index',[$category->id])}}" class="btn btn-primary btn-sm">Chaînes de valeur</a>
+                                                    @endif
                                                     <div class="dropdown d-inline-block">
                                                         <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="ri-more-fill align-middle"></i>
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end">
-                                                            <li>
-                                                                <a class="dropdown-item edit-item-btn" href="{{route('indicator.add',['ajouter',$category->id])}}"><i class="ri-add-fill align-bottom me-2 text-muted"></i> Ajouter un indicateurs</a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="dropdown-item edit-item-btn" href="{{route('indicator.index',[$category->id])}}"><i class="ri-search-line align-bottom me-2 text-muted"></i> Lise des indicateurs</a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="dropdown-item edit-item-btn" href="{{route('category.add',[$category->id])}}"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Modifier la catégorie d'indicateur</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0);" onclick="deleted('{{$category->id}}','{{route('category.delete')}}')" class="dropdown-item remove-item-btn">
-                                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted" ></i> Supprimer
-                                                                </a>
-                                                            </li>
+                                                            @if(Auth::user()->permission('EDITION CATEGORIE'))
+                                                                <li>
+                                                                    <a class="dropdown-item edit-item-btn" href="{{route('category.add',[$category->id])}}"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Modifier la catégorie</a>
+                                                                </li>
+                                                            @endif
+                                                            @if(Auth::user()->permission('SUPPRESSION CATEGORIE'))
+                                                                <li>
+                                                                    <a href="javascript:void(0);" onclick="deleted('{{$category->id}}','{{route('category.delete')}}')" class="dropdown-item remove-item-btn">
+                                                                        <i class="ri-delete-bin-fill align-bottom me-2 text-muted" ></i> Supprimer
+                                                                    </a>
+                                                                </li>
+                                                            @endif
                                                         </ul>
                                                     </div>
                                                 </td>

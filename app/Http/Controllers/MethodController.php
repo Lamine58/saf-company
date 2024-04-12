@@ -10,12 +10,16 @@
     {
         public function index()
         {
+            Auth::user()->access('LISTE METHODE');
+
             $methods = Method::paginate(10);
             return view('method.index',compact('methods'));
         }
 
         public function save(Request $request)
         {
+
+            Auth::user()->access('AJOUT METHODE');
 
             $validator = $request->validate([
                 'name' => 'required|string',
@@ -38,6 +42,8 @@
         }
 
         public function delete(Request $request){
+
+            Auth::user()->access('SUPPRESSION METHODE');
 
             $method = Method::find($request->id);
 

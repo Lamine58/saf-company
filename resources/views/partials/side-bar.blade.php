@@ -62,94 +62,114 @@
                         </ul>
                     </div>
                 </li>
+
+                @if(Auth::user()->permission('LISTE CHAINE DE VALEUR'))
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('value-chain.index')}}">
+                            <i class="ri-pie-chart-2-line"></i> <span data-key="t-dashboards">Chaîne de valeurs</span>
+                        </a>
+                    </li>
+                @endif
                 
-                @if(Auth::user()->account=='ADMINISTRATEUR' || Auth::user()->account=='MINISTERE')
-          
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="{{route('method.index')}}">
-                            <i class="ri-file-search-line"></i> <span data-key="t-dashboards">Méthodes de collecte des données</span>
-                        </a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="{{route('unity.index')}}">
-                            <i class="ri-router-line"></i> <span data-key="t-dashboards">Unités de mesures</span>
-                        </a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="{{route('periodicity.index')}}">
-                            <i class="ri-time-line"></i> <span data-key="t-dashboards">Periodicités</span>
-                        </a>
-                    </li>
-                    
+                @if(Auth::user()->permission('AJOUT CATEGORIE') || Auth::user()->permission('LISTE CATEGORIE'))
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarCategorie" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCategorie">
-                            <i class="ri-apps-2-line"></i> <span data-key="t-apps">Categories des indicateurs</span>
+                            <i class="ri-apps-2-line"></i> <span data-key="t-apps">Categories</span>
                         </a>
                         <div class="collapse menu-dropdown" id="sidebarCategorie">
                             <ul class="nav nav-sm flex-column" >
-                                <li class="nav-item">
-                                    <a href="{{route("category.add",['ajouter'])}}" class="nav-link" data-key="t-calendar"> Ajouter </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{route("category.index")}}" class="nav-link" data-key="t-calendar"> Liste </a>
-                                </li>
+                                @if(Auth::user()->permission('AJOUT CATEGORIE'))
+                                    <li class="nav-item">
+                                        <a href="{{route("category.add",['ajouter'])}}" class="nav-link" data-key="t-calendar"> Ajouter </a>
+                                    </li>
+                                @endif
+                                @if(Auth::user()->permission('LISTE CATEGORIE'))
+                                    <li class="nav-item">
+                                        <a href="{{route("category.index")}}" class="nav-link" data-key="t-calendar"> Liste </a>
+                                    </li>
+                                @endif
                             </ul>
                         </div>
                     </li>
-                          
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sidebarZone" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarZone">
-                            <i class="ri-map-pin-line"></i> <span data-key="t-apps">Zones</span>
-                        </a>
-                        <div class="collapse menu-dropdown" id="sidebarZone">
-                            <ul class="nav nav-sm flex-column" >
-                                <li class="nav-item">
-                                    <a href="{{route("zone.add",['ajouter'])}}" class="nav-link" data-key="t-calendar"> Ajouter </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{route("zone.index")}}" class="nav-link" data-key="t-calendar"> Liste </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
                 @endif
-                
-                @if(Auth::user()->account=='ADMINISTRATEUR' || Auth::user()->account=='MINISTERE')
+
+                @if(Auth::user()->permission('AJOUT FOURNISSEUR') || Auth::user()->permission('LISTE FOURNISSEUR'))
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarBusiness" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuth">
                             <i class="ri-building-line"></i> <span data-key="t-authentication">Fournisseurs</span>
                         </a>
                         <div class="collapse menu-dropdown" id="sidebarBusiness">
                             <ul class="nav nav-sm flex-column" >
-                                <li class="nav-item">
-                                    <a href="{{route("business.add",['ajouter'])}}" class="nav-link" data-key="t-calendar"> Ajouter </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{route("business.index")}}" class="nav-link" data-key="t-calendar"> Liste </a>
-                                </li>
+                                @if(Auth::user()->permission('AJOUT FOURNISSEUR'))
+                                    <li class="nav-item">
+                                        <a href="{{route("business.add",['ajouter'])}}" class="nav-link" data-key="t-calendar"> Ajouter </a>
+                                    </li>
+                                @endif
+                                @if(Auth::user()->permission('LISTE FOURNISSEUR'))
+                                    <li class="nav-item">
+                                        <a href="{{route("business.index")}}" class="nav-link" data-key="t-calendar"> Liste </a>
+                                    </li>
+                                @endif
                             </ul>
                         </div>
                     </li>
                 @endif
 
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuth">
-                        <i class="ri-account-circle-line"></i> <span data-key="t-authentication">Utilisateurs</span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="sidebarAuth">
-                        <ul class="nav nav-sm flex-column" >
-                            <li class="nav-item">
-                                <a href="{{route("user.add",['ajouter'])}}" class="nav-link" data-key="t-calendar"> Ajouter </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{route("user.index")}}" class="nav-link" data-key="t-calendar"> Liste </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
+                @if(Auth::user()->permission('LISTE METHODE'))
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('method.index')}}">
+                            <i class="ri-file-search-line"></i> <span data-key="t-dashboards">Méthodes de collecte des données</span>
+                        </a>
+                    </li>
+                @endif
+                    
+                @if(Auth::user()->permission('LISTE UNITE'))
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('unity.index')}}">
+                            <i class="ri-router-line"></i> <span data-key="t-dashboards">Unités de mesures</span>
+                        </a>
+                    </li>
+                @endif
+                    
+                @if(Auth::user()->permission('LISTE PERIODICITE'))
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('periodicity.index')}}">
+                            <i class="ri-time-line"></i> <span data-key="t-dashboards">Periodicités</span>
+                        </a>
+                    </li>
+                @endif
+                
+                @if(Auth::user()->permission('AJOUT UTILISATEUR') || Auth::user()->permission('LISTE UTILISATEUR') || Auth::user()->permission('LISTE ROLE') || Auth::user()->permission('LISTE PERMISSION'))
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuth">
+                            <i class="ri-account-circle-line"></i> <span data-key="t-authentication">Utilisateurs</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="sidebarAuth">
+                            <ul class="nav nav-sm flex-column" >
+                                @if(Auth::user()->permission('AJOUT UTILISATEUR'))
+                                    <li class="nav-item">
+                                        <a href="{{route("user.add",['ajouter'])}}" class="nav-link" data-key="t-calendar"> Ajouter </a>
+                                    </li>
+                                @endif
+                                @if(Auth::user()->permission('LISTE UTILISATEUR'))
+                                    <li class="nav-item">
+                                        <a href="{{route("user.index")}}" class="nav-link" data-key="t-calendar"> Liste </a>
+                                    </li>
+                                @endif
+                                @if(Auth::user()->permission('LISTE ROLE'))
+                                    <li class="nav-item">
+                                        <a href="{{route("role.index")}}" class="nav-link" data-key="t-calendar"> Rôles </a>
+                                    </li>
+                                @endif
+                                @if(Auth::user()->permission('LISTE PERMISSION'))
+                                    <li class="nav-item">
+                                        <a href="{{route("permission.index")}}" class="nav-link" data-key="t-calendar"> Permissions </a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+                    </li>
+                @endif
 
 
             </ul>

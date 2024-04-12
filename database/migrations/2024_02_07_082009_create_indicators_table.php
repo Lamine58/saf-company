@@ -13,18 +13,17 @@ return new class extends Migration
     {
         Schema::create('indicators', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->text('indicator');
-            $table->text('definition')->nullable();
+            $table->text('question');
             $table->string('type');
             $table->longtext('data')->nullable();
             $table->uuid('user_id');
-            $table->uuid('categorie_id');
+            $table->uuid('quizze_id');
             $table->uuid('method_id');
             $table->uuid('unity_id');
             $table->uuid('periodicity_id');
             $table->timestamps();
 
-            $table->foreign('categorie_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('quizze_id')->references('id')->on('quizzes')->onDelete('cascade');
             $table->foreign('method_id')->references('id')->on('methods')->onDelete('cascade');
             $table->foreign('unity_id')->references('id')->on('unities')->onDelete('cascade');
             $table->foreign('periodicity_id')->references('id')->on('periodicities')->onDelete('cascade');

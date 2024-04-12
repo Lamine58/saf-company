@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Liste des etablissements')
+@section('title', 'Liste des Fournisseurs')
 
 @section('content')
 
@@ -13,12 +13,12 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">Liste des etablissements</h4>
+                            <h4 class="mb-sm-0">Liste des Fournisseurs</h4>
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
                                     <li class="breadcrumb-item"><a href="javascript: void(0);">Fournisseurs</a></li>
-                                    <li class="breadcrumb-item active">Liste des etablissements</li>
+                                    <li class="breadcrumb-item active">Liste des Fournisseurs</li>
                                 </ol>
                             </div>
 
@@ -50,20 +50,23 @@
                                                 <td>{{$business->email}}</td>
                                                 <td>{{$business->location}}</td>
                                                 <td>
-                                                    
                                                     <div class="dropdown d-inline-block">
                                                         <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="ri-more-fill align-middle"></i>
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end">
-                                                            <li>
-                                                                <a class="dropdown-item edit-item-btn" href="{{route('business.add',[$business->id])}}"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Modifier</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0);" onclick="deleted('{{$business->id}}','{{route('business.delete')}}')" class="dropdown-item remove-item-btn">
-                                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted" ></i> Supprimer
-                                                                </a>
-                                                            </li>
+                                                            @if(Auth::user()->permission('EDITION FOURNISSEUR'))
+                                                                <li>
+                                                                    <a class="dropdown-item edit-item-btn" href="{{route('business.add',[$business->id])}}"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Modifier le fournisseur</a>
+                                                                </li>
+                                                            @endif
+                                                            @if(Auth::user()->permission('SUPPRESSION FOURNISSEUR'))
+                                                                <li>
+                                                                    <a href="javascript:void(0);" onclick="deleted('{{$business->id}}','{{route('business.delete')}}')" class="dropdown-item remove-item-btn">
+                                                                        <i class="ri-delete-bin-fill align-bottom me-2 text-muted" ></i> Supprimer
+                                                                    </a>
+                                                                </li>
+                                                            @endif
                                                         </ul>
                                                     </div>
                                                 </td>

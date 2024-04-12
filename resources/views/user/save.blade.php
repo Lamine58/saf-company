@@ -44,46 +44,44 @@
                                             
                                                     <div >
                                                         <label class="form-label">Type de compte</label>
-                                                        <select name="account" id="account" class="form-control">
-                                                            @if(Auth::user()->account=='ADMINISTRATEUR' || Auth::user()->account=='MINISTERE')
-                                                                <option {{$user->account=="ADMINISTRATEUR" ? 'selected' : ''}} >ADMINISTRATEUR</option>
-                                                                <option {{$user->account=="MINISTERE" ? 'selected' : ''}}>MINISTERE</option>
-                                                                <option {{$user->account=="FOURNISSEUR" ? 'selected' : ''}}>FOURNISSEUR</option>
-                                                                <option {{$user->account=="ENQUETEUR" ? 'selected' : ''}}>ENQUETEUR</option>
-                                                            @else
-                                                                <option {{$user->account=="FOURNISSEUR" ? 'selected' : ''}}>FOURNISSEUR</option>
-                                                                <option {{$user->account=="ENQUETEUR" ? 'selected' : ''}}>ENQUETEUR</option>
-                                                            @endif
-                                                        </select>
-                                                    </div>
-        
-                                                    @if(Auth::user()->account=='ADMINISTRATEUR' || Auth::user()->account=='MINISTERE')
-                                                        <div  class="mt-3 {{$user->business_id==null ? 'hidden' : '' }} business">
-                                                            <label class="form-label">Fournisseur</label>
-                                                            <select id="business_id" class="form-control" name="business_id"> 
-                                                                @foreach($businesses as $business)
-                                                                    <option value="{{$business->id}}" {{$business->id==$user->business_id ? 'selected' : ''}} >{{$business->legal_name}}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    @else
-                                                        <input type="hidden" name="business_id" value="{{Auth::user()->business_id}}">
-                                                    @endif
-
-                                                    
-                                                    <div  class="mt-3 {{$user->account=='ENQUETEUR' ? '' : 'hidden' }} query">
-                                                        <label class="form-label">Zone</label>
-                                                        <select id="zone_id" class="form-control" name="zone_id"> 
-                                                            @foreach($zones as $zone)
-                                                                <option value="{{$zone->id}}" {{$zone->id==$user->zone_id ? 'selected' : ''}} >{{$zone->name}} - {{$zone->departement}}</option>
+                                                        <select name="role_id" id="role_id" class="form-control select2">
+                                                            @foreach($roles as $role)
+                                                                <option value="{{$role->id}}" {{$role->id==$user->role_id ? 'selected' : ''}}>{{$role->name}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
-        
+
                                                     <div class="mt-3">
-                                                        <label class="form-label">Email</label>
-                                                        <input type="text" name="email" value="{{$user->email}}" class="form-control rounded-end" />
+                                                        <label class="form-label">Matricule</label>
+                                                        <input type="text" name="matricule" value="{{$user->matricule}}" class="form-control rounded-end" />
                                                     </div>
+
+                                                    <div class="mt-3">
+                                                        <label class="form-label">Fonction</label>
+                                                        <input type="text" name="fonction" value="{{$user->fonction}}" class="form-control rounded-end" />
+                                                    </div>
+
+                                                    <div  class="mt-3">
+                                                        <label class="form-label">Région</label>
+                                                        <select id="region_id" class="form-control select2" name="region_id">
+                                                            <option value="">Selectionner la région</option>
+                                                            @foreach($reigons as $reigon)
+                                                                <option value="{{$reigon->id}}" {{$reigon->id==$user->region_id ? 'selected' : ''}} >{{$reigon->name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <div  class="mt-3">
+                                                        <label class="form-label">Département</label>
+                                                        <select id="departement_id" class="form-control select2" name="departement_id"> 
+                                                            <option value="">Tout</option>
+                                                            @foreach(($user->region->departements ?? $departements) as $departement)
+                                                                <option value="{{$departement->id}}" {{$departement->id==$user->departement_id ? 'selected' : ''}} >{{$departement->name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+        
                                                 </div>
         
                                                 <div class="col-lg-6">
@@ -101,6 +99,11 @@
                                                     <div  class="mt-3">
                                                         <label class="form-label">Téléphone</label>
                                                         <input type="text" name="phone" value="{{$user->phone}}" class="form-control rounded-end phone" />
+                                                    </div>
+
+                                                    <div class="mt-3">
+                                                        <label class="form-label">Email</label>
+                                                        <input type="text" name="email" value="{{$user->email}}" class="form-control rounded-end" />
                                                     </div>
                                                     <br>
                                                 </div>
@@ -148,20 +151,29 @@
 
     <script>
 
-        $('#account').on('change',()=>{
+        $('#region_id').on('change',function(){
 
-            if($('#account').val()=='FOURNISSEUR' || $('#account').val()=='ENQUETEUR'){
-                $('.business').removeClass('hidden');
-            }else{
-                $('.business').addClass('hidden');
-            }
+            var regionId = $(this).val();
 
-            if($('#account').val()=='ENQUETEUR'){
-                $('.query').removeClass('hidden');
-            }else{
-                $('.query').addClass('hidden');
-            }
+            $.ajax({
+                url: '/regions/' + regionId + '/departements',
+                type: 'GET',
+                success: function(response) {
 
+                    $('#departement_id').select2('destroy');
+
+                    var options = '<option value="">Tout</option>';
+                    $.each(response, function(index, departement) {
+                        options += '<option value="' + departement.id + '">' + departement.name + '</option>';
+                    });
+                    $('#departement_id').html(options);
+                    $('#departement_id').select2();
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+            
         });
 
         $('.add_user').submit(function(e){

@@ -32,4 +32,39 @@ class Business extends Model
         return $this->hasMany(User::class);
     }
 
+    public function region()
+    {
+        return $this->belongsTo(Region::class);
+    }
+
+    public function departement()
+    {
+        return $this->belongsTo(Region::class);
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
+    }
+
+    public function quizzes()
+    {
+        return $this->belongsToMany(Quizze::class);
+    }
+
+    public function business_category()
+    {
+        return $this->belongsToMany(Category::class);
+    }
+
+    public function business_quizze()
+    {
+        return $this->belongsToMany(Quizze::class);
+    }
+
+    public function value_chain()
+    {
+        return $this->belongsToMany(Quizze::class);
+    }
+    
 }

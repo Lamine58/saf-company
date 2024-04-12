@@ -628,7 +628,7 @@
                             <img class="rounded-circle header-profile-user" src="{{ Auth::user()->avatar!='' ? Storage::url(Auth::user()->avatar) : asset('/images/user.jpeg')}}" alt="Header Avatar">
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{Auth::user()->first_name}} {{Auth::user()->last_name}}</span>
-                                <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">{{Auth::user()->busines->legal_name ?? Auth::user()->account}}</span>
+                                <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">{{Auth::user()->role->name}}</span>
                             </span>
                         </span>
                     </button>

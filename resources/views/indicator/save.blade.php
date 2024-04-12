@@ -13,12 +13,12 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">{{$title}} à  {{$category->name}}</h4>
+                            <h4 class="mb-sm-0">{{$title}} : {{$quizze->value_chain->name}} {{$quizze->category->name}}</h4>
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Indicateur</a></li>
-                                    <li class="breadcrumb-item active">{{$title}} à  {{$category->name}}</li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Question</a></li>
+                                    <li class="breadcrumb-item active">{{$title}} : {{$quizze->value_chain->name}} {{$quizze->category->name}}</li>
                                 </ol>
                             </div>
 
@@ -29,7 +29,7 @@
                 <form action="{{route('indicator.save')}}" class="add_indicator">
                     @csrf
                     <input type="hidden" name="id" value="{{$indicator->id}}">
-                    <input type="hidden" name="categorie_id" value="{{$category->id}}">
+                    <input type="hidden" name="quizze_id" value="{{$quizze->id}}">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card">
@@ -38,15 +38,9 @@
                                         <div class="col-md-12">
                                             <div class="row g-3">
     
-                                                <div class="col-lg-6">
-                                                    <label class="form-label">Indicateur</label>
-                                                    <textarea id="indicator" class="form-control rounded-end" name="indicator" rows="3">{{$indicator->indicator}}</textarea>
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    <div>
-                                                        <label class="form-label">Définition</label>
-                                                        <textarea name="definition" id="definition" class="form-control rounded-end" rows="3">{{$indicator->definition}}</textarea>
-                                                    </div>
+                                                <div class="col-lg-12">
+                                                    <label class="form-label">Question</label>
+                                                    <textarea id="question" class="form-control rounded-end" name="question" rows="2">{{$indicator->question}}</textarea>
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <select name="method_id" id="method_id" class="form-control rounded-end mt-1">
@@ -77,12 +71,12 @@
                                                         <option {{$indicator->type=='Nombre' ? 'selected' : ''}} >Nombre</option>
                                                         <option {{$indicator->type=='Text' ? 'selected' : ''}} >Text</option>
                                                         <option {{$indicator->type=='Long text' ? 'selected' : ''}} >Long text</option>
-                                                        <option {{$indicator->type=='Indicateur à choix unique' ? 'selected' : ''}} >Indicateur à choix unique</option>
-                                                        <option {{$indicator->type=='Indicateur à choix multiple' ? 'selected' : ''}} >Indicateur à choix multiple</option>
+                                                        <option {{$indicator->type=='Question à choix unique' ? 'selected' : ''}} >Question à choix unique</option>
+                                                        <option {{$indicator->type=='Question à choix multiple' ? 'selected' : ''}} >Question à choix multiple</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6"></div>
-                                                <div class="col-lg-4 choice choice-class {{($indicator->type=='Indicateur à choix unique' || $indicator->type=='Indicateur à choix multiple') ? '' : 'hidden'}} ">
+                                                <div class="col-lg-4 choice choice-class {{($indicator->type=='Question à choix unique' || $indicator->type=='Question à choix multiple') ? '' : 'hidden'}} ">
                                                     @foreach(json_decode($indicator->data ?? '[]') as $choice)
                                                         <div class="row">
                                                             <div class="col-md-10">
@@ -94,7 +88,7 @@
                                                         </div>
                                                     @endforeach()
                                                 </div>
-                                                <div class="col-lg-2 choice-class {{($indicator->type=='Indicateur à choix unique' || $indicator->type=='Indicateur à choix multiple') ? '' : 'hidden'}} "><button id="add-choice" type="button"  style="width:100%" class="btn btn-block btn-primary btn-sm"><i class="ri-add-fill"></i> Ajouter une option</button></div>
+                                                <div class="col-lg-2 choice-class {{($indicator->type=='Question à choix unique' || $indicator->type=='Question à choix multiple') ? '' : 'hidden'}} "><button id="add-choice" type="button"  style="width:100%" class="btn btn-block btn-primary btn-sm"><i class="ri-add-fill"></i> Ajouter une option</button></div>
                                                 <div class="col-lg-12">
                                                     <button id="add_indicator" class="btn btn-primary btn-block" style="width:100%">Enregistrer</button>
                                                 </div>
@@ -128,7 +122,7 @@
 
         $('#type').on('change',()=>{
 
-            if($('#type').val()=='Indicateur à choix unique' || $('#type').val()=='Indicateur à choix multiple'){
+            if($('#type').val()=='Question à choix unique' || $('#type').val()=='Question à choix multiple'){
                 $('.choice-class').removeClass('hidden');
             }else{
                 $('.choice-class').addClass('hidden');
@@ -186,7 +180,7 @@
                             backgroundColor: "#4CAF50", // green
                         }).showToast();
 
-                        window.location='{{route('indicator.index',[$category->id])}}'
+                        window.location='{{route('indicator.index',[$quizze->id])}}'
                     }else{
                         Toastify({
                             text: result.message,

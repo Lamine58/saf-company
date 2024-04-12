@@ -30,15 +30,18 @@
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
-                                <form class="row py-2 add" action="{{route('unity.save')}}">
-                                    @csrf
-                                    <div class="col-md-3">
-                                        <input name="name" required type="text" class="form-control" placeholder="Libellé">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <button id="add" class="btn btn-primary">Enregister</button>
-                                    </div>
-                                </form>
+
+                                @if(Auth::user()->permission('AJOUT UNITE'))
+                                    <form class="row py-2 add" action="{{route('unity.save')}}">
+                                        @csrf
+                                        <div class="col-md-3">
+                                            <input name="name" required type="text" class="form-control" placeholder="Libellé">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button id="add" class="btn btn-primary">Ajouter <i class="ri-add-line"></i></button>
+                                        </div>
+                                    </form>
+                                @endif
                         
                                 <table id="table" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
                                     <thead>
@@ -55,16 +58,18 @@
                                                 <td>{{$unity->user->first_name}} {{$unity->user->last_name}}</td>
                                                 <td>
                                                     <div class="dropdown d-inline-block">
-                                                        <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="ri-more-fill align-middle"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu dropdown-menu-end">
-                                                            <li>
-                                                                <a href="javascript:void(0);" onclick="deleted('{{$unity->id}}','{{route('unity.delete')}}')" class="dropdown-item remove-item-btn">
-                                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted" ></i> Supprimer
-                                                                </a>
-                                                            </li>
-                                                        </ul>
+                                                        @if(Auth::user()->permission('SUPPRESSION UNITE'))
+                                                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <i class="ri-more-fill align-middle"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                                <li>
+                                                                    <a href="javascript:void(0);" onclick="deleted('{{$unity->id}}','{{route('unity.delete')}}')" class="dropdown-item remove-item-btn">
+                                                                        <i class="ri-delete-bin-fill align-bottom me-2 text-muted" ></i> Supprimer
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        @endif
                                                     </div>
                                                 </td>
                                             </tr>

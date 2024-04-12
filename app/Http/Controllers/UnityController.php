@@ -10,12 +10,17 @@
     {
         public function index()
         {
+
+            Auth::user()->access('LISTE UNITE');
+
             $unities = Unity::paginate(10);
             return view('unity.index',compact('unities'));
         }
 
         public function save(Request $request)
         {
+
+            Auth::user()->access('AJOUT UNITE');
 
             $validator = $request->validate([
                 'name' => 'required|string',
@@ -38,6 +43,8 @@
         }
 
         public function delete(Request $request){
+
+            Auth::user()->access('SUPPRESSION UNITE');
 
             $unity = Unity::find($request->id);
 

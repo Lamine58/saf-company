@@ -4,12 +4,15 @@
 
     use Illuminate\Http\Request;
     use App\Models\Category;
+    use App\Models\Quizze;
     use Illuminate\Support\Facades\Auth;
 
     class CategoryController extends Controller
     {
         public function index()
         {
+            Auth::user()->access('LISTE CATEGORIE');
+
             $categories = Category::paginate(10);
             return view('category.index',compact('categories'));
         }
@@ -20,9 +23,11 @@
 
             if(!is_null($category)){
                 $title = "Modifier $category->name";
+                Auth::user()->access('EDITION CATEGORIE');
             }else{
                 $category = new Category;
-                $title = 'Ajouter une categorie d\'indicateur';
+                $title = 'Ajouter une categorie';
+                Auth::user()->access('AJOUT CATEGORIE');
             }
 
             return view('category.save',compact('category','title'));
@@ -31,6 +36,12 @@
         public function save(Request $request)
         {
             
+            if($request->id){
+                Auth::user()->access('EDITION CATEGORIE');
+            }else{
+                Auth::user()->access('AJOUT CATEGORIE');
+            }
+
             $validator = $request->validate([
                 'name' => 'required|string',
             ]);
@@ -53,7 +64,29 @@
 
         }
 
+        
+
+        public function categories($category_ids){
+
+            $category_ids = explode(',',$category_ids);
+            $quizzes = Quizze::whereIn('category_id',$category_ids)->get();
+
+            $data = [];
+
+            foreach($quizzes as $quizze){
+
+                $data [] = [
+                    "id"=>$quizze->id,
+                    "name"=>$quizze->value_chain->name.' '.$quizze->category->name,
+                ];
+            }
+
+            return response()->json($data);
+        }
+
         public function delete(Request $request){
+
+            Auth::user()->access('SUPPRESSION CATEGORIE');
 
             $category = Category::find($request->id);
 
