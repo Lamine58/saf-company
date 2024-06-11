@@ -55,6 +55,11 @@
                                                             <i class="ri-more-fill align-middle"></i>
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end">
+                                                            @if(Auth::user()->permission('DETAILS FOURNISSEUR'))
+                                                                <li>
+                                                                    <a class="dropdown-item edit-item-btn" href="{{route('business.data',[$business->id])}}"><i class="ri-eye-fill align-bottom me-2 text-muted"></i> Détails fournisseur</a>
+                                                                </li>
+                                                            @endif
                                                             @if(Auth::user()->permission('EDITION FOURNISSEUR'))
                                                                 <li>
                                                                     <a class="dropdown-item edit-item-btn" href="{{route('business.add',[$business->id])}}"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Modifier le fournisseur</a>

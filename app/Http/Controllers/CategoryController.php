@@ -77,7 +77,8 @@
 
                 $data [] = [
                     "id"=>$quizze->id,
-                    "name"=>$quizze->value_chain->name.' '.$quizze->category->name,
+                    // "name"=>$quizze->value_chain->name.' '.$quizze->category->name,
+                    "name"=>$quizze->value_chain->name,
                 ];
             }
 

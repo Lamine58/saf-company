@@ -39,7 +39,12 @@ class Business extends Model
 
     public function departement()
     {
-        return $this->belongsTo(Region::class);
+        return $this->belongsTo(Departement::class);
+    }
+
+    public function filiere()
+    {
+        return $this->belongsTo(Filiere::class);
     }
 
     public function categories()
@@ -47,9 +52,19 @@ class Business extends Model
         return $this->belongsToMany(Category::class);
     }
 
+    public function exploitations()
+    {
+        return $this->hasMany(Exploitation::class);
+    }
+
     public function quizzes()
     {
         return $this->belongsToMany(Quizze::class);
+    }
+
+    public function type_filieres()
+    {
+        return $this->belongsToMany(TypeFiliere::class);
     }
 
     public function business_category()
@@ -67,4 +82,8 @@ class Business extends Model
         return $this->belongsToMany(Quizze::class);
     }
     
+    public function sous_prefecture()
+    {
+        return $this->belongsTo(SousPrefecture::class);
+    }
 }

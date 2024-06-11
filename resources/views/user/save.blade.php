@@ -64,9 +64,9 @@
                                                     <div  class="mt-3">
                                                         <label class="form-label">Région</label>
                                                         <select id="region_id" class="form-control select2" name="region_id">
-                                                            <option value="">Selectionner la région</option>
-                                                            @foreach($reigons as $reigon)
-                                                                <option value="{{$reigon->id}}" {{$reigon->id==$user->region_id ? 'selected' : ''}} >{{$reigon->name}}</option>
+                                                            <option value="">Tout</option>
+                                                            @foreach($regions as $region)
+                                                                <option value="{{$region->id}}" {{$region->id==$user->region_id ? 'selected' : ''}} >{{$region->name}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -81,6 +81,15 @@
                                                         </select>
                                                     </div>
 
+                                                    <div  class="mt-3">
+                                                        <label class="form-label">Sous prefecture</label>
+                                                        <select id="sous_prefecture_id" class="form-control select2" name="sous_prefecture_id"> 
+                                                            <option value="">Tout</option>
+                                                            @foreach(($user->departement->sous_prefectures ?? []) as $sous_prefecture)
+                                                                <option value="{{$sous_prefecture->id}}" {{$sous_prefecture->id==$user->sous_prefecture_id ? 'selected' : ''}} >{{$sous_prefecture->name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
         
                                                 </div>
         
@@ -168,6 +177,32 @@
                     });
                     $('#departement_id').html(options);
                     $('#departement_id').select2();
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+            
+        });
+
+
+        $('#departement_id').on('change',function(){
+
+            var departementId = $(this).val();
+
+            $.ajax({
+                url: '/departements/' + departementId + '/sous-prefectures',
+                type: 'GET',
+                success: function(response) {
+
+                    $('#sous_prefecture_id').select2('destroy');
+
+                    var options = '<option value="">Tout</option>';
+                    $.each(response, function(index, sous_prefecture) {
+                        options += '<option value="' + sous_prefecture.id + '">' + sous_prefecture.name + '</option>';
+                    });
+                    $('#sous_prefecture_id').html(options);
+                    $('#sous_prefecture_id').select2();
                 },
                 error: function(xhr, status, error) {
                     console.error(error);

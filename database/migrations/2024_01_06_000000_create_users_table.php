@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('role_id');
             $table->string('region_id')->nullable();
             $table->string('departement_id')->nullable();
+            $table->string('sous_prefecture_id')->nullable();
             $table->string('fonction');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

@@ -28,7 +28,9 @@ Route::prefix('v1')->group(function () {
     #post
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/categories', [ApiController::class, 'categories']);
-    Route::post('/add-investigation', [ApiController::class, 'add_investigation']);
-    Route::post('/update-investigation', [ApiController::class, 'update_investigation']);
-
+    Route::post('/add-collection', [ApiController::class, 'add_collection']);
+    Route::post('/update-collection', [ApiController::class, 'update_collection']);
+    Route::post('/add-business', [ApiController::class, 'add_business']);
+    Route::post('/add-exploitation', [ApiController::class, 'add_exploitation']);
+    
 });

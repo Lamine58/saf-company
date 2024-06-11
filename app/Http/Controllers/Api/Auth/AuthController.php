@@ -32,6 +32,7 @@
                     $user = Auth::user();
                     $user->role;
                     $user->departement;
+                    $user->sous_prefecture;
                     return response()->json(["user"=>$user,"token"=>$token->token,"status"=>"success"], 200);
 
                 }else{

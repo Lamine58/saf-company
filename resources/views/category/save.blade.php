@@ -17,7 +17,7 @@
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Categories indicateurs</a></li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Type</a></li>
                                     <li class="breadcrumb-item active">{{$title}}</li>
                                 </ol>
                             </div>
@@ -38,7 +38,7 @@
                                             <div class="row g-3">
     
                                                 <div class="col-lg-6">
-                                                    <label class="form-label">Categorie indicateur</label>
+                                                    <label class="form-label">Libellé</label>
                                                     <input type="text" name="name" value="{{$category->name}}" required class="form-control rounded-end" />
                                                 </div>
                                                 <div class="col-lg-6">

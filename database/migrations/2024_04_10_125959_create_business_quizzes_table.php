@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('business_quizze', function (Blueprint $table) {
             $table->uuid('business_id')->constrained()->onDelete('cascade');
             $table->uuid('quizze_id')->constrained()->onDelete('cascade');
+            $table->uuid('exploitation_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

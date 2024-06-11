@@ -14,8 +14,28 @@
         public function index()
         {
             Auth::user()->access('LISTE UTILISATEUR');
+
+            $departement_id = Auth::user()->departement_id;
+            $region_id = Auth::user()->region_id;
+            $sous_prefecture_id = Auth::user()->sous_prefecture_id;
             
-            $users = User::paginate(100);
+
+            if(!is_null($sous_prefecture_id)){
+
+                $users = User::where('sous_prefecture_id',$sous_prefecture_id)->paginate(100);
+
+            }elseif(!is_null($departement_id)){
+
+                $users = User::where('departement_id',$departement_id)->paginate(100);
+
+            }elseif(!is_null($region_id)){
+
+                $users = User::where('region_id',$region_id)->paginate(100);
+
+            }else{
+                $users = User::paginate(100);
+            }
+            
             return view('user.index',compact('users'));
         }
 
@@ -35,13 +55,10 @@
             }
             
             $departements = [];
-            $reigons = Region::all();
+            $regions = Region::all();
             $roles = Role::all();
-            return view('user.save',compact('user','title','departements','reigons','roles'));
+            return view('user.save',compact('user','title','departements','regions','roles'));
         }
-
-
-
 
         public function save(Request $request)
         {

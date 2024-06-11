@@ -11,7 +11,6 @@ class BusinessQuizze extends Model
     use HasFactory;
     public $incrementing = false;
     protected $keyType = 'string';
-
     public $table = 'business_quizze';
     
 

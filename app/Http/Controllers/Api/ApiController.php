@@ -5,10 +5,19 @@
     use App\Http\Controllers\Controller;
     use App\Models\Category;
     use App\Models\Investigation;
+    use App\Models\Collection;
     use App\Models\Business;
+    use App\Models\Exploitation;
+    use App\Models\Departement;
     use App\Models\Quizze;
     use App\Models\User;
     use App\Models\Region;
+    use App\Models\TypeExploitation;
+    use App\Models\BusinessCategory;
+    use App\Models\BusinessQuizze;
+    use App\Models\Indicator;
+    use App\Models\SousPrefecture;
+    use App\Models\Filiere;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\Validator;
@@ -22,83 +31,64 @@
             // $this->middleware('authorization');
         }
 
-        public function investigations(Request $request)
-        {
-            $investigations = Investigation::with('indicator')
-            ->where('user_id', $request->user_id)
-            ->where('state', $request->state)
-            ->get();
-            
-            return response()->json([
-                'status'=>"success",
-                'investigations'=>$investigations,
-            ], 200);
-
-        }
-
         public function categories(Request $request)
         {
 
-            // $investigations = json_decode($request->investigations);
+            $collections = $request->collections;
 
-            // if(count($investigations)>0){
+            if(count($collections)>0){
 
-            //     foreach($investigations as $data){
+                foreach($collections as $data){
 
-            //         $investigation = new Investigation;
-            //         $investigation->value = $data->value;
-            //         $investigation->indicator_id = $data->indicator_id;
-            //         $investigation->user_id = $data->user_id;
-            //         $investigation->date = $data->date;
-            //         $investigation->state = 'pending';
+                    $quizze = Quizze::find($data['investigations'][0]['quizze_id']);
 
-            //         $investigation->save();
-            //     }
-            // }
+                    $collection = new Collection;
+                    $collection->value_chain_id = $quizze->value_chain_id;
+                    $collection->exploitation_id = $data['exploitation_id'];
+                    $collection->category_id = $quizze->category_id; 
+                    $collection->user_id = $data['user_id'];
+                    $collection->date = $data['date'];
+                    $collection->business_id = $data['business_id'];
+                    $collection->state = 'pending';
+                    $collection->location = json_encode($data['location']);
+                    $collection->save();
+        
+                    foreach($data['investigations'] as $investigation_data){
+        
+                        $investigation = new Investigation;
+                        $investigation->value = $investigation_data['value'];
+                        $investigation->indicator_id = $investigation_data['id'];
+                        $investigation->collection_id = $collection->id;
+                        $investigation->save();
+                    }
+                }
+            }
 
-            // $categories = Category::with('value_chain')->get();
 
             $user = User::findOrfail($request->user_id);
 
-            // foreach ($categories as $category) {
-            //     foreach ($category->value_chain as $quizze) {
-            //         $quizze->value_chain->name;
-            //         $quizze->indicators;
-
-            //         if(!is_null($user->departement_id)){
-            //             $quizze->businesses = Business::with(['business_category', 'business_quizze'])
-            //                 ->where('departement_id',$user->departement_id)
-            //                 ->whereHas('business_category', function ($query) use ($category) {
-            //                     $query->where('category_id', $category->id);
-            //                 })
-            //                 ->get();
-            //         }elseif(!is_null($user->region_id)){
-            //             $quizze->businesses = Business::with(['business_category', 'business_quizze'])
-            //                 ->where('region_id',$user->region_id)
-            //                 ->whereHas('business_category', function ($query) use ($category) {
-            //                     $query->where('category_id', $category->id);
-            //                 })
-            //                 ->get();
-            //         }else{
-            //             $quizze->businesses = [];
-            //         }
-            //     }
-            // }
-
-            $businesses = [];
+            $exploitations = [];
+            $data = [];
             $region = null;
+            $departement = null;
             $departement_name = '';
+            $sous_prefecture_name = '';
 
-            if(!is_null($user->departement_id)){
-                $businesses = Business::where('departement_id',$user->departement_id)->get();
+            if(!is_null($user->sous_prefecture_id)){
+                $exploitations = Exploitation::where('sous_prefecture_id',$user->sous_prefecture_id)->get();
+                $sous_prefecture_name = $user->sous_prefecture->name;
+            }elseif(!is_null($user->departement_id)){
                 $departement_name = $user->departement->name;
+                $departement = Departement::find($user->departement_id);
             }elseif(!is_null($user->region_id)){
                 $region = Region::find($user->region_id);
             }
 
-            foreach ($businesses as $business) {
-                foreach($business->business_category as $business_category){
-                    foreach ($business_category->value_chain as $quizze) {
+            foreach ($exploitations as $exploitation) {
+                $exploitation->business->name;
+                $exploitation->type_exploitation->name;
+                foreach($exploitation->exploitation_category as $exploitation_category){
+                    foreach ($exploitation_category->value_chain as $quizze) {
                         $quizze->value_chain->name;
                         $quizze->indicators;
                         foreach($quizze->indicators as $indicator){
@@ -108,8 +98,8 @@
 
                             foreach (json_decode($indicator->data ?? []) as $key => $value) {
                                 $array[] = [
-                                        "value" => $value,
-                                        "selected" => false,
+                                    "value" => $value,
+                                    "selected" => false,
                                 ];
                             }
 
@@ -120,11 +110,13 @@
                 }
             }
 
-            foreach($region->departements ?? [] as $departement){
-                $departement->businesses = Business::where('departement_id',$departement->id)->get();
-                foreach ($departement->businesses as $business) {
-                    foreach($business->business_category as $business_category){
-                        foreach ($business_category->value_chain as $quizze) {
+            foreach($departement->sous_prefectures ?? [] as $sous_prefecture){
+                $sous_prefecture->exploitations = Exploitation::where('sous_prefecture_id',$sous_prefecture->id)->get();
+                foreach ($sous_prefecture->exploitations as $exploitation) {
+                    $exploitation->business->name;
+                    $exploitation->type_exploitation->name;
+                    foreach($exploitation->exploitation_category as $exploitation_category){
+                        foreach ($exploitation_category->value_chain as $quizze) {
                             $quizze->value_chain->name;
                             foreach($quizze->indicators as $indicator){
 
@@ -145,83 +137,301 @@
                 }
             }
 
-            $investigations = Investigation::with('indicator')->where('user_id',$request->user_id)->orderBy('created_at', 'desc')->get();
-            $investigations_success = Investigation::with('indicator')->where('user_id',$request->user_id)->where('state','success')->orderBy('created_at', 'desc')->get();
-            $investigations_wait = Investigation::with('indicator')->where('user_id',$request->user_id)->where('state','pending')->orderBy('created_at', 'desc')->get();
-            $investigations_faild = Investigation::with('indicator')->where('user_id',$request->user_id)->where('state','faild')->orderBy('created_at', 'desc')->get();
+            foreach($region->departements ?? [] as $departement){
+                foreach($departement->sous_prefectures ?? [] as $sous_prefecture){
+                    $sous_prefecture->exploitations = Exploitation::where('sous_prefecture_id',$sous_prefecture->id)->get();
+                    foreach ($sous_prefecture->exploitations as $exploitation) {
+                        $exploitation->business->name;
+                        $exploitation->type_exploitation->name;
+                        foreach($exploitation->exploitation_category as $exploitation_category){
+                            foreach ($exploitation_category->value_chain as $quizze) {
+                                $quizze->value_chain->name;
+                                foreach($quizze->indicators as $indicator){
+    
+                                    $indicator->value="";
+                                    $array = [];
+        
+                                    foreach (json_decode($indicator->data ?? []) as $key => $value) {
+                                        $array[] = [
+                                                "value" => $value,
+                                                "selected" => false,
+                                        ];
+                                    }
+        
+                                    $indicator->data = $array;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(is_null($region)){
+
+                $data = Region::all();
+
+                foreach($data as $region){                
+
+                    foreach($region->departements as $departement_region){
+                        foreach($departement_region->sous_prefectures ?? [] as $sous_prefecture){
+                            $sous_prefecture->exploitations = Exploitation::where('sous_prefecture_id',$sous_prefecture->id)->get();
+                            foreach ($sous_prefecture->exploitations as $exploitation) {
+                                $exploitation->business->name;
+                                $exploitation->type_exploitation->name;
+                                foreach($exploitation->exploitation_category as $exploitation_category){
+                                    foreach ($exploitation_category->value_chain as $quizze) {
+                                        $quizze->value_chain->name;
+                                        foreach($quizze->indicators as $indicator){
+            
+                                            $indicator->value="";
+                                            $array = [];
+                
+                                            foreach (json_decode($indicator->data ?? []) as $key => $value) {
+                                                $array[] = [
+                                                        "value" => $value,
+                                                        "selected" => false,
+                                                ];
+                                            }
+                
+                                            $indicator->data = $array;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            $collections_wait = Collection::with('investigations', 'value_chain', 'category', 'business')
+            ->where('user_id', $request->user_id)
+            ->where('state', 'pending')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+            $collectionss_success = Collection::with('investigations', 'value_chain', 'category', 'business')
+            ->where('user_id', $request->user_id)
+            ->where('state', 'success')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+            $collections_faild = Collection::with('investigations', 'value_chain', 'category', 'business')
+            ->where('user_id', $request->user_id)
+            ->where('state', 'faild')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+            foreach ($collections_wait as $collection) {
+                $indicators = Quizze::where('category_id', $collection->category_id)
+                    ->where('value_chain_id', $collection->value_chain_id)
+                    ->first()
+                    ->indicators;
+
+                $collection->indicators = $indicators;
+            }
+
+            foreach ($collectionss_success as $collection) {
+                $indicators = Quizze::where('category_id', $collection->category_id)
+                    ->where('value_chain_id', $collection->value_chain_id)
+                    ->first()
+                    ->indicators;
+
+                $collection->indicators = $indicators;
+            }
+
+            foreach ($collections_faild as $collection) {
+                $indicators = Quizze::where('category_id', $collection->category_id)
+                    ->where('value_chain_id', $collection->value_chain_id)
+                    ->first()
+                    ->indicators;
+
+                $collection->indicators = $indicators;
+            }
 
             $user->role;
 
+            $regions = Region::with('departements.sous_prefectures')->get();
+            $departements = [];
+            $sous_prefectures = [];
+            $type_exploitations = TypeExploitation::all();
+            $categories = Category::with('value_chain.value_chain')->get();
+            $filieres = Filiere::with('categories')->get();
+            $businesses = Business::with(['exploitations.departement', 'exploitations.filiere', 'exploitations.category','exploitations.type_exploitation'])->get();
+
+
             return response()->json([
                 'user'=>$user,
+                'data'=>$data,
+                'categories'=>$categories,
+                'type_exploitations'=>$type_exploitations,
+                'departement'=>$departement,
+                'filieres'=>$filieres,
+                'regions'=>$regions,
+                'sous_prefectures'=>$regions,
                 'businesses'=>$businesses,
+                'departements'=>$departements,
+                'exploitations'=>$exploitations,
                 'region'=>$region,
                 'departement_name'=>$departement_name,
+                'sous_prefecture_name'=>$sous_prefecture_name,
                 'status'=>"success",
-                'investigations'=>$investigations->count(),
-                'investigations_all'=>$investigations,
-                'investigations_success'=>$investigations_success,
-                'investigations_wait'=>$investigations_wait,
-                'investigations_faild'=>$investigations_faild
+                'collections'=>0,
+                'collections_all'=> [],
+                'collections_success'=> $collectionss_success,
+                'collections_wait'=> $collections_wait,
+                'collections_faild'=> $collections_faild,
             ], 200);
 
         }
 
-        public function update_investigation(Request $request)
+        public function update_collection(Request $request)
         {
+
             $validator = Validator::make($request->all(), [
-                'id' => 'required',
-                'value' => 'required',
-                'indicator_id' => 'required',
-                'user_id' => 'required',
+                'investigations' => 'required',
                 'date' => 'required',
+                
             ]);
 
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()], 401);
             }
 
-            $investigation = Investigation::find($request->id);
-            $investigation->value = $request->value;
-            $investigation->date = $request->date;
-            $investigation->state = 'pending';
+            foreach($request->investigations as $investigation_data){
 
-            if ($investigation->save()) {
-
-                return response()->json(['message' => 'Enquête modifié avec succès', 'status' => 'success'], 200);
-
-            } else {
-                return response()->json(["message"=>"Echec de la modification veuillez réessayer","status"=>"error"], 401);
+                $investigation = Investigation::find($investigation_data['id']);
+                $investigation->value = $investigation_data['value'];
+                $investigation->save();
             }
+
+            return response()->json(['message' => 'Enquête modifié avec succès', 'status' => 'success'], 200);
         }
 
-        public function add_investigation(Request $request)
+        public function add_collection(Request $request)
         {
+
             $validator = Validator::make($request->all(), [
-                'value' => 'required',
-                'indicator_id' => 'required',
+                'business_id' => 'required',
                 'user_id' => 'required',
+                'investigations' => 'required',
                 'date' => 'required',
+                'exploitation_id'
             ]);
 
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()], 401);
             }
 
-            $investigation = new Investigation;
-            $investigation->value = $request->value;
-            $investigation->indicator_id = $request->indicator_id;
-            $investigation->user_id = $request->user_id;
-            $investigation->date = $request->date;
-            $investigation->state = 'pending';
+            $quizze = Quizze::find($request->investigations[0]['quizze_id']);
 
-            if ($investigation->save()) {
+            $collection = new Collection;
+            $collection->value_chain_id = $quizze->value_chain_id;
+            $collection->exploitation_id = $request->exploitation_id;
+            $collection->category_id = $quizze->category_id;
+            $collection->user_id = $request->user_id;
+            $collection->date = $request->date;
+            $collection->business_id = $request->business_id;
+            $collection->state = 'pending';
+            $collection->location = json_encode($request->location);
+            $collection->save();
+
+            foreach($request->investigations as $investigation_data){
+
+                $investigation = new Investigation;
+                $investigation->indicator_id = $investigation_data['id'];
+                $investigation->value = $investigation_data['value'];
+                $investigation->collection_id = $collection->id;
+                $investigation->save();
+            }
+
+            if ($collection->save()) {
 
                 return response()->json(['message' => 'Enquête enregistré avec succès', 'status' => 'success'], 200);
 
             } else {
                 return response()->json(["message"=>"Echec de l'enregistrement veuillez réessayer","status"=>"error"], 401);
             }
+        }
+
+
+
+
+        public function add_business(Request $request)
+        {
+            
+            $validator = $request->validate([
+                'legal_name' => 'required|string',
+                'region_id' => 'required|string',
+                'departement_id' => 'required|string',
+                'phone' => 'required|string',
+                'location' => 'required|string',
+                'email' => 'required|email',
+                'user_id' => 'required|string',
+            ]);
+            
+            $data = $request->except(['logo']);
+            
+            $data['date_of_birth'] = date('Y/m/d',strtotime($data['date_of_birth']));
+            
+            $business = Business::where('email', $data['email'])->first();
+
+            
+            if ($business) {
+                return response()->json(['message' => 'L\'adresse e-mail est déjà utilisée.',"status"=>"error"]);
+            } else {
+                $business = Business::updateOrCreate(
+                    ['id' => $request->id],
+                    $data
+                );
+
+                $business->type_filieres()->sync($request->filiere_ids);
+            }
+
+            return response()->json(['message' => 'Fournisseur enregistré avec succès',"status"=>"success"]);
+
+        }
+
+
+        public function add_exploitation(Request $request)
+        {
+            
+            $validator = $request->validate([
+                'region_id' => 'required|string',
+                'departement_id' => 'required|string',
+                'phone' => 'required|string',
+                'location' => 'required|string',
+                'user_id' => 'required|string',
+            ]);
+            
+            $data = $request->except(['logo']);
+            
+            $data['date_of_birth'] = date('Y/m/d',strtotime($data['date_of_birth']));
+            
+  
+            $exploitation = Exploitation::create(
+                $data
+            );
+
+            // $exploitation->type_filieres()->sync($request->filiere_ids);
+
+            $business_category = new BusinessCategory;
+            $business_category->exploitation_id = $exploitation->id;
+            $business_category->business_id = $request->business_id;
+            $business_category->category_id = $request->category_id;
+            $business_category->save();
+
+            foreach($request->quizze_id as $quizze_id){
+                    
+                $business_quizze = new BusinessQuizze;
+                $business_quizze->exploitation_id = $exploitation->id;
+                $business_quizze->business_id = $request->business_id;
+                $business_quizze->quizze_id = $quizze_id;
+                $business_quizze->save();
+            }
+
+            return response()->json(['message' => 'Exploitation enregistré avec succès',"status"=>"success"]);
+
         }
 
     }

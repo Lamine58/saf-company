@@ -25,12 +25,12 @@ class Investigation extends Model
             $model->id = Str::uuid();
         });
     }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
     
+    public function collection()
+    {
+        return $this->belongsTo(Collection::class);
+    }
+
     public function indicator()
     {
         return $this->belongsTo(Indicator::class);

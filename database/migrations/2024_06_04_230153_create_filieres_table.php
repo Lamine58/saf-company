@@ -11,17 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('investigations', function (Blueprint $table) {
+        Schema::create('filieres', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('value');
-            $table->uuid('indicator_id');
+            $table->string('name');
             $table->uuid('user_id');
-            $table->date('date');
-            $table->string('state');
             $table->timestamps();
-
-            $table->foreign('indicator_id')->references('id')->on('indicators')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -30,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('investigations');
+        Schema::dropIfExists('filieres');
     }
 };

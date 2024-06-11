@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\MethodController;
+use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\UnityController;
 use App\Http\Controllers\PeriodicityController;
 use App\Http\Controllers\ZoneController;
@@ -15,6 +16,10 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ValueChainController;
 use App\Http\Controllers\QuizzeController;
 use App\Http\Controllers\RegionController;
+use App\Http\Controllers\DepartementController;
+use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TypeExploitationController;
 
 
 /*
@@ -34,14 +39,9 @@ Route::post('/auth', [AuthController::class, 'auth'])->name('auth');
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/deconnexion', [AuthController::class, 'logout'])->name('logout');
-        
-    Route::get('/', function () {
-        return view('dashboard.index');
-    });
 
-    Route::get('/dashboard', function () {
-        return view('dashboard.index');
-    })->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index']);
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     #utilisateur
     Route::get('/liste-des-utilisateurs', [UserController::class, 'index'])->name('user.index');
@@ -51,18 +51,37 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/liste-des-fournisseurs', [BusinessController::class, 'index'])->name('business.index');
     Route::get('/fournisseur/{id}', [BusinessController::class, 'add'])->name('business.add');
+    Route::get('/exploitation/{id}', [BusinessController::class, 'exploitation'])->name('business.exploitation');
+    Route::get('/details-fournisseur/{id}', [BusinessController::class, 'data'])->name('business.data');
     Route::post('/save-business', [BusinessController::class, 'save'])->name('business.save');
-    Route::delete('/delete-business', [BusinessController::class, 'delete'])->name('business.delete');
+    Route::post('/save-exploitation', [BusinessController::class, 'save_exploitation'])->name('business.save-exploitation');
+    Route::get('/delete-business', [BusinessController::class, 'delete'])->name('business.delete');
+    Route::get('/delete-exploitation', [BusinessController::class, 'delete_exploitation'])->name('business.delete-exploitation');
         
     #methode
     Route::get('/liste-des-methode-de-collecte-des-donnees', [MethodController::class, 'index'])->name('method.index');
     Route::post('/save-method', [MethodController::class, 'save'])->name('method.save');
     Route::get('/delete-method', [MethodController::class, 'delete'])->name('method.delete');
+
+    #filière
+    Route::get('/liste-des-filieres', [FiliereController::class, 'index'])->name('filiere.index');
+    Route::post('/save-filiere', [FiliereController::class, 'save'])->name('filiere.save');
+    Route::post('/save-type-filiere', [FiliereController::class, 'save_type_filiere'])->name('filiere.save-type-filiere');
+    Route::get('/delete-filiere', [FiliereController::class, 'delete'])->name('filiere.delete');
+    Route::get('/delete-type-filiere', [FiliereController::class, 'delete_type_filiere'])->name('filiere.delete-type-filiere');
+    Route::get('/filieres/{filiere_id}', [FiliereController::class, 'get_type_filiere'])->name('filiere.get-type-filiere');
+
+    
     
     #unité
     Route::get('/liste-des-unites-de-mesures', [UnityController::class, 'index'])->name('unity.index');
     Route::post('/save-unity', [UnityController::class, 'save'])->name('unity.save');
     Route::get('/delete-unity', [UnityController::class, 'delete'])->name('unity.delete');
+
+    #type d'exploitation
+    Route::get('/liste-des-types-exploitations', [TypeExploitationController::class, 'index'])->name('type-exploitation.index');
+    Route::post('/save-type-exploitation', [TypeExploitationController::class, 'save'])->name('type-exploitation.save');
+    Route::get('/delete-type-exploitation', [TypeExploitationController::class, 'delete'])->name('type-exploitation.delete');
     
     #periodicité
     Route::get('/liste-des-periodicites', [PeriodicityController::class, 'index'])->name('periodicity.index');
@@ -86,9 +105,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/indicateur/{indicateur_id}/{quizze_id}', [IndicatorController::class, 'add'])->name('indicator.add');
     Route::post('/save-indicator', [IndicatorController::class, 'save'])->name('indicator.save');
     Route::get('/delete-indicator', [IndicatorController::class, 'delete'])->name('indicator.delete');
-
-
-
 
     #role
     Route::get('/liste-des-roles', [RoleController::class, 'index'])->name('role.index');
@@ -117,10 +133,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/questionnaire/{id}', [QuizzeController::class, 'add'])->name('quizze.add');
     Route::post('/save-quizze', [QuizzeController::class, 'save'])->name('quizze.save');
     Route::get('/delete-quizze', [QuizzeController::class, 'delete'])->name('quizze.delete');
+    Route::get('/statistiques/{id}', [QuizzeController::class, 'stats'])->name('quizze.stats');
 
+    #collection
+    Route::get('/liste-des-enquetes/{type}', [CollectionController::class, 'index'])->name('collection.index');
+    Route::get('/donnees/{id}', [CollectionController::class, 'data'])->name('collection.data');
+    Route::get('/state/{state}', [CollectionController::class, 'state'])->name('collection.state');
+    
     #region
     Route::get('regions/{region_id}/departements', [RegionController::class, 'departements'])->name('departements.by_region');
+    Route::get('departements/{departement_id}/sous-prefectures', [DepartementController::class, 'sous_prefectures'])->name('sous-prefectures.by_departement');
     Route::get('categories/{category_ids}', [CategoryController::class, 'categories'])->name('categories.by_ids');
-    
-    
+
 });

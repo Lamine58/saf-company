@@ -37,4 +37,9 @@ class Departement extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function sous_prefectures()
+    {
+        return $this->hasMany(SousPrefecture::class);
+    }
+
 }

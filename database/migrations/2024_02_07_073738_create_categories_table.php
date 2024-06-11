@@ -16,8 +16,11 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->text('description')->nullable();
+            $table->uuid('filiere_id');
             $table->uuid('user_id');
             $table->timestamps();
+
+            $table->foreign('filiere_id')->references('id')->on('filieres')->onDelete('cascade');
 
         });
     }

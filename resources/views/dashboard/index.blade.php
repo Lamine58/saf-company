@@ -19,21 +19,6 @@
                                         <h4 class="fs-16 mb-1">Bienvenue!</h4>
                                         <p class="text-muted mb-0">Espace d'administration</p>
                                     </div>
-                                    <div class="mt-3 mt-lg-0">
-                                        <form action="javascript:void(0);">
-                                            <div class="row g-3 mb-0 align-items-center">
-                                                <div class="col-sm-auto">
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control border-0 dash-filter-picker shadow" data-provider="flatpickr" data-range-date="true" data-date-format="d M, Y" data-deafult-date="01 Jan 2022 to 31 Jan 2022">
-                                                        <div class="input-group-text bg-primary border-primary text-white">
-                                                            <i class="ri-calendar-2-line"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--end row-->
-                                        </form>
-                                    </div>
                                 </div><!-- end card header -->
                             </div>
                             <!--end col-->
@@ -52,8 +37,7 @@
                                         </div>
                                         <div class="d-flex align-items-end justify-content-between mt-4">
                                             <div>
-                                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="100">0</span> </h4>
-                                                <a href="#" class="text-decoration-underline">Voir l'historique</a>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$collections->count()}}">{{$collections->count()}}</span> </h4>
                                             </div>
                                             <div class="avatar-sm flex-shrink-0">
                                                 <span class="avatar-title bg-soft-primary rounded fs-3">
@@ -76,8 +60,7 @@
                                         </div>
                                         <div class="d-flex align-items-end justify-content-between mt-4">
                                             <div>
-                                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="46">0</span></h4>
-                                                <a href="#" class="text-decoration-underline">Voir</a>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$collections_pending->count()}}">{{$collections_pending->count()}}</span></h4>
                                             </div>
                                             <div class="avatar-sm flex-shrink-0">
                                                 <span class="avatar-title bg-soft-info rounded fs-3">
@@ -100,8 +83,7 @@
                                         </div>
                                         <div class="d-flex align-items-end justify-content-between mt-4">
                                             <div>
-                                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="50">0</span></h4>
-                                                <a href="#" class="text-decoration-underline">Voir</a>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$collections_success->count()}}">{{$collections_success->count()}}</span></h4>
                                             </div>
                                             <div class="avatar-sm flex-shrink-0">
                                                 <span class="avatar-title bg-soft-success rounded fs-3">
@@ -124,8 +106,7 @@
                                         </div>
                                         <div class="d-flex align-items-end justify-content-between mt-4">
                                             <div>
-                                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="4">0</span></h4>
-                                                <a href="#" class="text-decoration-underline">Voir</a>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$collections_faild->count()}}">{{$collections_faild->count()}}</span></h4>
                                             </div>
                                             <div class="avatar-sm flex-shrink-0">
                                                 <span class="avatar-title bg-soft-danger rounded fs-3">
@@ -149,28 +130,28 @@
                                         <div class="row g-0 text-center">
                                             <div class="col-6 col-sm-3">
                                                 <div class="p-3 border border-dashed border-start-0">
-                                                    <h5 class="mb-1"><span class="counter-value" data-target="100">0</span></h5>
+                                                    <h5 class="mb-1"><span class="counter-value" data-target="{{$collections->count()}}">0</span></h5>
                                                     <p class="text-muted mb-0">Total</p>
                                                 </div>
                                             </div>
                                             <!--end col-->
                                             <div class="col-6 col-sm-3">
                                                 <div class="p-3 border border-dashed border-start-0 border-end-0">
-                                                    <h5 class="mb-1"><span class="counter-value" data-target="46">0</span></h5>
+                                                    <h5 class="mb-1"><span class="counter-value" data-target="{{$collections_pending->count()}}">0</span></h5>
                                                     <p class="text-muted mb-0">En attentes</p>
                                                 </div>
                                             </div>
                                             <!--end col-->
                                             <div class="col-6 col-sm-3">
                                                 <div class="p-3 border border-dashed border-start-0">
-                                                    <h5 class="mb-1"><span class="counter-value" data-target="50"></span></h5>
+                                                    <h5 class="mb-1"><span class="counter-value" data-target="{{$collections_success->count()}}"></span></h5>
                                                     <p class="text-muted mb-0 text-success">Validées</p>
                                                 </div>
                                             </div>
                                             <!--end col-->
                                             <div class="col-6 col-sm-3">
                                                 <div class="p-3 border border-dashed border-start-0">
-                                                    <h5 class="mb-1"><span class="counter-value" data-target="4">0</span></h5>
+                                                    <h5 class="mb-1"><span class="counter-value" data-target="{{$collections_faild->count()}}">0</span></h5>
                                                     <p class="text-muted mb-0 text-danger">Refusées</p>
                                                 </div>
                                             </div>
@@ -193,7 +174,7 @@
                                     </div><!-- end card header -->
 
                                     <div class="card-body">
-                                        <div id="store-visits-source" data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]' class="apex-charts" dir="ltr"></div>
+                                        <div id="store-visits-source-2" data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]' class="apex-charts" dir="ltr"></div>
                                     </div>
                                 </div> <!-- .card-->
                             </div> <!-- .col-->
@@ -228,5 +209,22 @@
 
     <!-- App js -->
     <script src="assets/js/app.js"></script>
+
+    <script>
+        var options = {
+                series: [{{$collections_pending->count()}}, {{$collections_success->count()}}, {{$collections_faild->count()}}],
+                labels: ["En attente", "Validées", "Refusée"],
+                chart: {
+                    height: 300,
+                    type: "donut",
+                },
+                dataLabels: {
+                    enabled: false
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#store-visits-source-2"), options);
+            chart.render();
+    </script>
     
 @endsection

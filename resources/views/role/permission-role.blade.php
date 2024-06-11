@@ -135,7 +135,7 @@
                             backgroundColor: "red", // red
                         }).showToast();
                     }
-                    
+                    window.location.reload();
                 },
                 error: function(result){
 

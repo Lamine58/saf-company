@@ -71,6 +71,11 @@ class User extends Authenticatable
         return $this->belongsTo(Region::class);
     }
 
+    public function sous_prefecture()
+    {
+        return $this->belongsTo(SousPrefecture::class);
+    }
+
     public function permission($permission)
     {
        if (!$this->role) {
