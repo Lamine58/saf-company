@@ -61,21 +61,6 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    public function departement()
-    {
-        return $this->belongsTo(Departement::class);
-    }
-
-    public function region()
-    {
-        return $this->belongsTo(Region::class);
-    }
-
-    public function sous_prefecture()
-    {
-        return $this->belongsTo(SousPrefecture::class);
-    }
-
     public function permission($permission)
     {
        if (!$this->role) {

@@ -8,7 +8,7 @@
     <title>@yield('title')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{asset("images/logo_mirah_sans_fond.webp")}}">
+    <link rel="shortcut icon" href="{{asset("assets/images/logo-saf-short.png")}}">
 
     <!-- jsvectormap css -->
     <link href="{{asset("assets/libs/jsvectormap/css/jsvectormap.min.css")}}" rel="stylesheet" type="text/css" />
@@ -47,25 +47,25 @@
         color: #000000;
     }
     :is([data-layout=vertical],[data-layout=semibox])[data-sidebar=dark] .navbar-nav .nav-link:hover {
-        color: #e35310;
+        color: #1d73b8;
     }
     .menu-title span {
         padding: 12px 20px;
         display: inline-block;
-        color: #087039;
+        color: #189cd8;
     }
     :is([data-layout=vertical],[data-layout=semibox])[data-sidebar=dark][data-sidebar-size=sm] .navbar-brand-box {
         background: #ffffff;
     }
     :is([data-layout=vertical],[data-layout=semibox])[data-sidebar=dark] .navbar-nav .nav-link[data-bs-toggle=collapse][aria-expanded=true] {
-        color: #e45310;
+        color: #1d73b8;
     }
     :is([data-layout=vertical],[data-layout=semibox])[data-sidebar=dark] .navbar-nav .nav-sm .nav-link {
         color: #000000;
     }
 
     :is([data-layout=vertical],[data-layout=semibox])[data-sidebar=dark] .navbar-nav .nav-sm .nav-link:hover {
-        color: #087039;
+        color: #189cd8;
     }
     .dropify-wrapper .dropify-message > span > p{
         font-size: 12px;
@@ -118,16 +118,16 @@
     }
     button.dt-button:first-child, div.dt-button:first-child, a.dt-button:first-child, input.dt-button:first-child {
         margin-left: 0;
-        background: #11793a;
+        background: #189cd8;
         color: white;
         margin: 10px
     }
     .btn-primary{
-        background: #e65618;
+        background: #1d73b8;
         border: none
     }
     .btn-primary:hover{
-        background: #0f783b;
+        background: #189cd8;
         border: none
     }
 </style>
@@ -175,15 +175,15 @@
         <!-- ============================================================== -->
         @yield('content')
         <!-- end main content-->
-            <footer class="footer" style="background:black;padding:10px">
+            <footer class="footer">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-sm-6" style="color:#ffffff">
+                        <div class="col-sm-6">
                             <script>document.write(new Date().getFullYear())</script>
                         </div>
                         <div class="col-sm-6">
                             <div class="text-sm-end d-none d-sm-block">
-                                <img src="{{asset('images/zodiac.png')}}" style="height: 45px" alt="">
+                                <img src="{{asset('assets/images/logo-saf-short.png')}}" style="height: 30px" alt="">
                             </div>
                         </div>
                     </div>
@@ -229,7 +229,7 @@
     <script>
 
 
-        $('select').select2();
+        //$('select').select2();
 
         $('.phone').inputmask('225 9999999999', { placeholder: '' });
         $('.dropify-logo').dropify({

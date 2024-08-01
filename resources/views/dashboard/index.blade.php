@@ -32,12 +32,12 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
-                                                <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Total des enquêtes</p>
+                                                <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Item</p>
                                             </div>
                                         </div>
                                         <div class="d-flex align-items-end justify-content-between mt-4">
                                             <div>
-                                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$collections->count()}}">{{$collections->count()}}</span> </h4>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="0">0</span> </h4>
                                             </div>
                                             <div class="avatar-sm flex-shrink-0">
                                                 <span class="avatar-title bg-soft-primary rounded fs-3">
@@ -55,12 +55,12 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
-                                             <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Enquêtes en attentes</p>
+                                                <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Item</p>
                                             </div>
                                         </div>
                                         <div class="d-flex align-items-end justify-content-between mt-4">
                                             <div>
-                                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$collections_pending->count()}}">{{$collections_pending->count()}}</span></h4>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="0">0</span> </h4>
                                             </div>
                                             <div class="avatar-sm flex-shrink-0">
                                                 <span class="avatar-title bg-soft-info rounded fs-3">
@@ -78,12 +78,12 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
-                                                <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Enquêtes Validées</p>
+                                                <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Item</p>
                                             </div>
                                         </div>
                                         <div class="d-flex align-items-end justify-content-between mt-4">
                                             <div>
-                                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$collections_success->count()}}">{{$collections_success->count()}}</span></h4>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="0">0</span> </h4>
                                             </div>
                                             <div class="avatar-sm flex-shrink-0">
                                                 <span class="avatar-title bg-soft-success rounded fs-3">
@@ -101,12 +101,12 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
-                                                <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Enquêtes refusées</p>
+                                                <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Item</p>
                                             </div>
                                         </div>
                                         <div class="d-flex align-items-end justify-content-between mt-4">
                                             <div>
-                                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$collections_faild->count()}}">{{$collections_faild->count()}}</span></h4>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="0">0</span> </h4>
                                             </div>
                                             <div class="avatar-sm flex-shrink-0">
                                                 <span class="avatar-title bg-soft-danger rounded fs-3">
@@ -123,36 +123,36 @@
                             <div class="col-xl-8">
                                 <div class="card">
                                     <div class="card-header border-0 align-items-center d-flex">
-                                        <h4 class="card-title mb-0 flex-grow-1">Enquêtes</h4>
+                                        <h4 class="card-title mb-0 flex-grow-1">Item</h4>
                                     </div><!-- end card header -->
 
                                     <div class="card-header p-0 border-0 bg-soft-light">
                                         <div class="row g-0 text-center">
                                             <div class="col-6 col-sm-3">
                                                 <div class="p-3 border border-dashed border-start-0">
-                                                    <h5 class="mb-1"><span class="counter-value" data-target="{{$collections->count()}}">0</span></h5>
-                                                    <p class="text-muted mb-0">Total</p>
+                                                    <h5 class="mb-1"><span class="counter-value" data-target="0">0</span></h5>
+                                                    <p class="text-muted mb-0">Item</p>
                                                 </div>
                                             </div>
                                             <!--end col-->
                                             <div class="col-6 col-sm-3">
                                                 <div class="p-3 border border-dashed border-start-0 border-end-0">
-                                                    <h5 class="mb-1"><span class="counter-value" data-target="{{$collections_pending->count()}}">0</span></h5>
-                                                    <p class="text-muted mb-0">En attentes</p>
+                                                    <h5 class="mb-1"><span class="counter-value" data-target="0">0</span></h5>
+                                                    <p class="text-muted mb-0">Item</p>
                                                 </div>
                                             </div>
                                             <!--end col-->
                                             <div class="col-6 col-sm-3">
                                                 <div class="p-3 border border-dashed border-start-0">
-                                                    <h5 class="mb-1"><span class="counter-value" data-target="{{$collections_success->count()}}"></span></h5>
-                                                    <p class="text-muted mb-0 text-success">Validées</p>
+                                                    <h5 class="mb-1"><span class="counter-value" data-target="0">0</span></h5>
+                                                    <p class="text-muted mb-0 text-success">Item</p>
                                                 </div>
                                             </div>
                                             <!--end col-->
                                             <div class="col-6 col-sm-3">
                                                 <div class="p-3 border border-dashed border-start-0">
-                                                    <h5 class="mb-1"><span class="counter-value" data-target="{{$collections_faild->count()}}">0</span></h5>
-                                                    <p class="text-muted mb-0 text-danger">Refusées</p>
+                                                    <h5 class="mb-1"><span class="counter-value" data-target="0">0</span></h5>
+                                                    <p class="text-muted mb-0 text-danger">Item</p>
                                                 </div>
                                             </div>
                                             <!--end col-->
@@ -212,8 +212,8 @@
 
     <script>
         var options = {
-                series: [{{$collections_pending->count()}}, {{$collections_success->count()}}, {{$collections_faild->count()}}],
-                labels: ["En attente", "Validées", "Refusée"],
+                series: [1,1,1],
+                labels: ["1", "2", "3"],
                 chart: {
                     height: 300,
                     type: "donut",

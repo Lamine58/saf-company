@@ -44,7 +44,6 @@
 
                     $collection = new Collection;
                     $collection->value_chain_id = $quizze->value_chain_id;
-                    $collection->exploitation_id = $data['exploitation_id'];
                     $collection->category_id = $quizze->category_id; 
                     $collection->user_id = $data['user_id'];
                     $collection->date = $data['date'];
@@ -67,7 +66,8 @@
 
             $user = User::findOrfail($request->user_id);
 
-            $exploitations = [];
+            $businesses = [];
+            $businesses_data = collect([]);
             $data = [];
             $region = null;
             $departement = null;
@@ -75,7 +75,8 @@
             $sous_prefecture_name = '';
 
             if(!is_null($user->sous_prefecture_id)){
-                $exploitations = Exploitation::where('sous_prefecture_id',$user->sous_prefecture_id)->get();
+                $businesses = Business::where('sous_prefecture_id',$user->sous_prefecture_id)->get();
+                $businesses_data = $businesses;
                 $sous_prefecture_name = $user->sous_prefecture->name;
             }elseif(!is_null($user->departement_id)){
                 $departement_name = $user->departement->name;
@@ -84,42 +85,21 @@
                 $region = Region::find($user->region_id);
             }
 
-            foreach ($exploitations as $exploitation) {
-                $exploitation->business->name;
-                $exploitation->type_exploitation->name;
-                foreach($exploitation->exploitation_category as $exploitation_category){
-                    foreach ($exploitation_category->value_chain as $quizze) {
-                        $quizze->value_chain->name;
-                        $quizze->indicators;
-                        foreach($quizze->indicators as $indicator){
+            foreach ($businesses as $business) {
+                foreach($business->business_category as $business_category){
+                    $business->region->departement;
+                    $business->departement;
+                    $business->sous_prefecture;
+                    foreach ($business_category->value_chain as $quizze) {
 
-                            $indicator->value="";
-                            $array = [];
+                        $datas = $business_category->value_chain()->whereIn('id',$business->business_quizze->pluck('id'))->get();
 
-                            foreach (json_decode($indicator->data ?? []) as $key => $value) {
-                                $array[] = [
-                                    "value" => $value,
-                                    "selected" => false,
-                                ];
-                            }
+                        foreach ($datas as $quizze) {
 
-                            $indicator->data = $array;
-
-                        }
-                    }
-                }
-            }
-
-            foreach($departement->sous_prefectures ?? [] as $sous_prefecture){
-                $sous_prefecture->exploitations = Exploitation::where('sous_prefecture_id',$sous_prefecture->id)->get();
-                foreach ($sous_prefecture->exploitations as $exploitation) {
-                    $exploitation->business->name;
-                    $exploitation->type_exploitation->name;
-                    foreach($exploitation->exploitation_category as $exploitation_category){
-                        foreach ($exploitation_category->value_chain as $quizze) {
                             $quizze->value_chain->name;
+                            $quizze->indicators;
                             foreach($quizze->indicators as $indicator){
-
+    
                                 $indicator->value="";
                                 $array = [];
     
@@ -129,25 +109,67 @@
                                             "selected" => false,
                                     ];
                                 }
-    
                                 $indicator->data = $array;
                             }
                         }
+
+                        $business_category->value_chain = $datas;
                     }
                 }
             }
 
+            foreach($departement->sous_prefectures ?? [] as $sous_prefecture){
+                $sous_prefecture->businesses = Business::where('sous_prefecture_id',$sous_prefecture->id)->get();
+                foreach ($sous_prefecture->businesses as $business) {
+                    $business->region->departement;
+                    $business->departement;
+                    $business->sous_prefecture;
+                    foreach($business->business_category as $business_category){
+
+                        $datas = $business_category->value_chain()->whereIn('id',$business->business_quizze->pluck('id'))->get();
+
+                        foreach ($datas as $quizze) {
+
+                            $quizze->value_chain->name;
+                            $quizze->indicators;
+                            foreach($quizze->indicators as $indicator){
+    
+                                $indicator->value="";
+                                $array = [];
+    
+                                foreach (json_decode($indicator->data ?? []) as $key => $value) {
+                                    $array[] = [
+                                            "value" => $value,
+                                            "selected" => false,
+                                    ];
+                                }
+                                $indicator->data = $array;
+                            }
+                        }
+
+                        $business_category->value_chain = $datas;
+                    }
+                }
+                $businesses_data = $businesses_data->merge($sous_prefecture->businesses);
+            }
+
             foreach($region->departements ?? [] as $departement){
                 foreach($departement->sous_prefectures ?? [] as $sous_prefecture){
-                    $sous_prefecture->exploitations = Exploitation::where('sous_prefecture_id',$sous_prefecture->id)->get();
-                    foreach ($sous_prefecture->exploitations as $exploitation) {
-                        $exploitation->business->name;
-                        $exploitation->type_exploitation->name;
-                        foreach($exploitation->exploitation_category as $exploitation_category){
-                            foreach ($exploitation_category->value_chain as $quizze) {
+                    $sous_prefecture->businesses = Business::where('sous_prefecture_id',$sous_prefecture->id)->get();
+                    foreach ($sous_prefecture->businesses as $business) {
+                        $business->region->departement;
+                        $business->departement;
+                        $business->sous_prefecture;
+                        foreach($business->business_category as $business_category){
+
+                            $datas = $business_category->value_chain()->whereIn('id',$business->business_quizze->pluck('id'))->get();
+
+                            foreach ($datas as $quizze) {
+
                                 $quizze->value_chain->name;
+                                $quizze->indicators;
                                 foreach($quizze->indicators as $indicator){
-    
+        
                                     $indicator->value="";
                                     $array = [];
         
@@ -157,12 +179,14 @@
                                                 "selected" => false,
                                         ];
                                     }
-        
                                     $indicator->data = $array;
                                 }
                             }
+
+                            $business_category->value_chain = $datas;
                         }
                     }
+                    $businesses_data = $businesses_data->merge($sous_prefecture->businesses);
                 }
             }
 
@@ -174,15 +198,21 @@
 
                     foreach($region->departements as $departement_region){
                         foreach($departement_region->sous_prefectures ?? [] as $sous_prefecture){
-                            $sous_prefecture->exploitations = Exploitation::where('sous_prefecture_id',$sous_prefecture->id)->get();
-                            foreach ($sous_prefecture->exploitations as $exploitation) {
-                                $exploitation->business->name;
-                                $exploitation->type_exploitation->name;
-                                foreach($exploitation->exploitation_category as $exploitation_category){
-                                    foreach ($exploitation_category->value_chain as $quizze) {
+                            $sous_prefecture->businesses = Business::where('sous_prefecture_id',$sous_prefecture->id)->get();
+                            foreach ($sous_prefecture->businesses as $business) {
+                                $business->region->departement;
+                                $business->departement;
+                                $business->sous_prefecture;
+                                foreach($business->business_category as $business_category){
+
+                                    $datas = $business_category->value_chain()->whereIn('id',$business->business_quizze->pluck('id'))->get();
+
+                                    foreach ($datas as $quizze) {
+
                                         $quizze->value_chain->name;
+                                        $quizze->indicators;
                                         foreach($quizze->indicators as $indicator){
-            
+                
                                             $indicator->value="";
                                             $array = [];
                 
@@ -192,12 +222,14 @@
                                                         "selected" => false,
                                                 ];
                                             }
-                
                                             $indicator->data = $array;
                                         }
                                     }
+
+                                    $business_category->value_chain = $datas;
                                 }
                             }
+                            $businesses_data = $businesses_data->merge($sous_prefecture->businesses);
                         }
                     }
                 }
@@ -251,14 +283,20 @@
 
             $user->role;
 
-            $regions = Region::with('departements.sous_prefectures')->get();
+            $regions = Region::with([
+                'departements' => function ($query) {
+                    $query->orderBy('name');
+                },
+                'departements.sous_prefectures' => function ($query) {
+                    $query->orderBy('name');
+                }
+            ])->orderBy('name')->get();
+
             $departements = [];
             $sous_prefectures = [];
             $type_exploitations = TypeExploitation::all();
             $categories = Category::with('value_chain.value_chain')->get();
-            $filieres = Filiere::with('categories')->get();
-            $businesses = Business::with(['exploitations.departement', 'exploitations.filiere', 'exploitations.category','exploitations.type_exploitation'])->get();
-
+            $filieres = Filiere::with('categories','categories.value_chain.value_chain')->get();
 
             return response()->json([
                 'user'=>$user,
@@ -270,8 +308,9 @@
                 'regions'=>$regions,
                 'sous_prefectures'=>$regions,
                 'businesses'=>$businesses,
+                'businesses_data'=>$businesses_data,
                 'departements'=>$departements,
-                'exploitations'=>$exploitations,
+                'exploitations'=>[],
                 'region'=>$region,
                 'departement_name'=>$departement_name,
                 'sous_prefecture_name'=>$sous_prefecture_name,
@@ -327,7 +366,6 @@
 
             $collection = new Collection;
             $collection->value_chain_id = $quizze->value_chain_id;
-            $collection->exploitation_id = $request->exploitation_id;
             $collection->category_id = $quizze->category_id;
             $collection->user_id = $request->user_id;
             $collection->date = $request->date;
@@ -355,38 +393,36 @@
         }
 
 
-
-
         public function add_business(Request $request)
         {
             
             $validator = $request->validate([
-                'legal_name' => 'required|string',
                 'region_id' => 'required|string',
                 'departement_id' => 'required|string',
                 'phone' => 'required|string',
-                'location' => 'required|string',
-                'email' => 'required|email',
-                'user_id' => 'required|string',
             ]);
             
             $data = $request->except(['logo']);
             
-            $data['date_of_birth'] = date('Y/m/d',strtotime($data['date_of_birth']));
             
-            $business = Business::where('email', $data['email'])->first();
+            // $business = Business::where('phone', $data['phone'])->first();
 
             
-            if ($business) {
-                return response()->json(['message' => 'L\'adresse e-mail est déjà utilisée.',"status"=>"error"]);
-            } else {
+            // if ($business) {
+            //     return response()->json(['message' => 'Téléphone est déjà utilisée.',"status"=>"error"]);
+            // } else {
                 $business = Business::updateOrCreate(
                     ['id' => $request->id],
                     $data
                 );
 
-                $business->type_filieres()->sync($request->filiere_ids);
-            }
+                // $business->type_filieres()->sync($request->filiere_ids);
+
+                $business->filieres()->sync($request->filiere_id);
+                // $business->type_filieres()->sync($request->filiere_ids);
+                $business->categories()->sync($request->category_id);
+                $business->quizzes()->sync($request->quizze_id);
+            // }
 
             return response()->json(['message' => 'Fournisseur enregistré avec succès',"status"=>"success"]);
 

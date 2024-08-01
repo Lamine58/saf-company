@@ -35,7 +35,7 @@
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
-                                <table id="table" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
+                                <table id="table" class="table table-bordered dt-responsive table-striped align-middle" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>Rôle</th>
@@ -128,7 +128,6 @@
 
 
 @endsection
-
 @section('script')
     <script>
         new DataTable("#table", {

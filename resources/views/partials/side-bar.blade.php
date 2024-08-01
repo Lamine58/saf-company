@@ -2,7 +2,7 @@
     <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Dark Logo-->
-        <a href="index.html" class="logo logo-dark">
+        <a href="" class="logo logo-dark">
             <span class="logo-sm">
                 <img src="{{asset('images/logo_mirah_sans_fond.webp')}}" alt="" height="30">
             </span>
@@ -11,12 +11,12 @@
             </span>
         </a>
         <!-- Light Logo-->
-        <a href="index.html" class="logo logo-light">
+        <a href="" class="logo logo-light">
             <span class="logo-sm">
-                <img src="{{asset('images/logo_mirah_sans_fond.webp')}}" alt="" height="30">
+                <img src="{{asset('assets/images/logo-saf-short.png')}}" alt="" height="30">
             </span>
             <span class="logo-lg">
-                <img src="{{asset('images/logo_mirah.webp')}}" alt="" width="120">
+                <img src="{{asset('assets/images/logo-saf-short.png')}}" alt="" width="90">
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
@@ -37,167 +37,121 @@
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboard</span>
                     </a>
                 </li>
-                
-                @if(Auth::user()->permission('LISTE ENQUETE'))
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
-                            <i class="ri-search-2-line"></i> <span data-key="t-apps">Enquêtes</span>
-                        </a>
-                        <div class="collapse menu-dropdown" id="sidebarApps">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a href="{{route("collection.index",['en-attentes'])}}" class="nav-link" data-key="t-calendar"> En attentes </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{route("collection.index",['validees'])}}" class="nav-link" data-key="t-calendar"> Validées </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{route("collection.index",['annulees'])}}" class="nav-link" data-key="t-calendar"> Annulées </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                @endif
 
-                @if(Auth::user()->permission('DONNEES STATISTIQUES'))
-                    @foreach(App\Models\Filiere::orderBy('name','asc')->get() as $filiere)
-                        {{-- <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarCategorie-{{$categorie->id}}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCategorie-{{$categorie->id}}">
-                                <i class="ri-apps-2-line"></i> <span data-key="t-apps">{{$categorie->name}}</span>
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarCategorie-{{$categorie->id}}">
-                                <ul class="nav nav-sm flex-column" >
-                                    @foreach($categorie->value_chain->sortBy(function($value_chain) {
-                                        return $value_chain->value_chain->name;
-                                    }) as $value_chain)
-                                        <li class="nav-item">
-                                            <a href="{{ route('quizze.stats', [$value_chain->id]) }}" class="nav-link" data-key="t-calendar">{{ $value_chain->value_chain->name }}</a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </li> --}}
-                        <li class="nav-item">
-                            <a class="nav-link menu-link collapsed" href="#sidebarCategorie-{{$filiere->id}}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCategorie-{{$filiere->id}}">
-                                <i class="ri-apps-2-line"></i> <span data-key="t-apps">{{$filiere->name}}</span>
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarCategorie-{{$filiere->id}}">
-                                <ul class="nav nav-sm flex-column">
-                                    @foreach($filiere->categories()->orderBy('name','asc')->get() as $category)
-                                        <li class="nav-item">
-                                            <a href="#sidebar-{{$category->id}}" class="nav-link collapsed" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebar-{{$category->id}}" data-key="t-email">
-                                                {{$category->name}}
-                                            </a>
-                                            <div class="collapse menu-dropdown" id="sidebar-{{$category->id}}">
-                                                <ul class="nav nav-sm flex-column">
-                                                    @foreach($category->value_chain->sortBy(function($value_chain) {
-                                                        return $value_chain->value_chain->name;
-                                                    }) as $value_chain)
-                                                        <li class="nav-item">
-                                                            <a href="{{ route('quizze.stats', [$value_chain->id]) }}" class="nav-link" data-key="t-calendar">{{ $value_chain->value_chain->name }}</a>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            </div>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </li>
-                    @endforeach
-                @endif
-
-                @if(Auth::user()->permission('LISTE CHAINE DE VALEUR'))
+                @if(Auth::user()->permission("CRM") || Auth::user()->permission("MAILING"))
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="{{route('value-chain.index')}}">
-                            <i class="ri-pie-chart-2-line"></i> <span data-key="t-dashboards">Chaîne de valeurs</span>
+                        <a class="nav-link menu-link" href="{{route("crm")}}">
+                            <i class=" ri-computer-line"></i> <span data-key="t-dashboards">CRM</span>
                         </a>
                     </li>
                 @endif
-                
-                {{-- @if(Auth::user()->permission('AJOUT CATEGORIE') || Auth::user()->permission('LISTE CATEGORIE'))
+            
+                @if(Auth::user()->permission("LISTE CLIENT") || Auth::user()->permission("AJOUTER CLIENT"))
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sidebarCategorie" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCategorie">
-                            <i class="ri-apps-2-line"></i> <span data-key="t-apps">Categories</span>
+                        <a class="nav-link menu-link" href="#sidebarCustomer" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCustomer">
+                            <i class="ri-user-line"></i> <span data-key="t-authentication">Clients</span>
                         </a>
-                        <div class="collapse menu-dropdown" id="sidebarCategorie">
+                        <div class="collapse menu-dropdown" id="sidebarCustomer">
                             <ul class="nav nav-sm flex-column" >
-                                @if(Auth::user()->permission('AJOUT CATEGORIE'))
+                                @if(Auth::user()->permission("AJOUT CLIENT"))
                                     <li class="nav-item">
-                                        <a href="{{route("category.add",['ajouter'])}}" class="nav-link" data-key="t-calendar"> Ajouter </a>
+                                        <a href="{{route("customer.add",['ajouter'])}}" class="nav-link" data-key="t-calendar"> Ajouter un client </a>
                                     </li>
                                 @endif
-                                @if(Auth::user()->permission('LISTE CATEGORIE'))
+                                @if(Auth::user()->permission("LISTE CLIENT"))
                                     <li class="nav-item">
-                                        <a href="{{route("category.index")}}" class="nav-link" data-key="t-calendar"> Liste </a>
-                                    </li>
-                                @endif
-                            </ul>
-                        </div>
-                    </li>
-                @endif --}}
-
-                @if(Auth::user()->permission('AJOUT FOURNISSEUR') || Auth::user()->permission('LISTE FOURNISSEUR'))
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sidebarBusiness" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuth">
-                            <i class="ri-building-line"></i> <span data-key="t-authentication">Fournisseurs</span>
-                        </a>
-                        <div class="collapse menu-dropdown" id="sidebarBusiness">
-                            <ul class="nav nav-sm flex-column" >
-                                @if(Auth::user()->permission('AJOUT FOURNISSEUR'))
-                                    <li class="nav-item">
-                                        <a href="{{route("business.add",['ajouter'])}}" class="nav-link" data-key="t-calendar"> Ajouter </a>
-                                    </li>
-                                @endif
-                                @if(Auth::user()->permission('LISTE FOURNISSEUR'))
-                                    <li class="nav-item">
-                                        <a href="{{route("business.index")}}" class="nav-link" data-key="t-calendar"> Liste </a>
+                                        <a href="{{route("customer.index")}}" class="nav-link" data-key="t-calendar"> Liste des clients  </a>
                                     </li>
                                 @endif
                             </ul>
                         </div>
-                    </li>
-                @endif
-
-                @if(Auth::user()->permission('LISTE METHODE'))
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="{{route('method.index')}}">
-                            <i class="ri-file-search-line"></i> <span data-key="t-dashboards">Méthodes de collecte des données</span>
-                        </a>
-                    </li>
-                @endif
-                    
-                @if(Auth::user()->permission('LISTE UNITE'))
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="{{route('unity.index')}}">
-                            <i class="ri-router-line"></i> <span data-key="t-dashboards">Unités de mesures</span>
-                        </a>
-                    </li>
-                @endif
-                    
-                @if(Auth::user()->permission('LISTE PERIODICITE'))
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="{{route('periodicity.index')}}">
-                            <i class="ri-time-line"></i> <span data-key="t-dashboards">Periodicités</span>
-                        </a>
-                    </li>
-                @endif
-
-                @if(Auth::user()->permission('LISTE TYPE EXPLOITATION'))
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="{{route('type-exploitation.index')}}">
-                            <i class="ri-menu-add-line"></i> <span data-key="t-dashboards">Types d'exploitations</span>
-                        </a>
                     </li>
                 @endif
                 
-                @if(Auth::user()->permission('LISTE FILIERE'))
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarSouscription" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSouscription">
+                        <i class="ri-file-list-line"></i> <span data-key="t-authentication">Souscriptions</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarSouscription">
+                        <ul class="nav nav-sm flex-column" >
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-calendar"> Nouvelle souscription </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-calendar"> Souscription en cours </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-calendar"> Souscription expiré </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-calendar"> Paiements </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarMoney" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMoney">
+                        <i class="ri-arrow-left-right-line"></i> <span data-key="t-authentication">Transfert d'argent</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarMoney">
+                        <ul class="nav nav-sm flex-column" >
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-calendar"> Charger un rapport Excel</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-calendar"> Historique transaction </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-calendar"> Rapports </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                
+                @if(Auth::user()->permission("LISTE TYPE D'ASSURANCE") || Auth::user()->permission("AJOUTER TYPE D'ASSURANCE"))
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="{{route('filiere.index')}}">
-                            <i class="ri-menu-add-line"></i> <span data-key="t-dashboards">Filières</span>
+                        <a class="nav-link menu-link" href="#sidebarInsurancetype" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarInsurancetype">
+                            <i class="ri-home-heart-line"></i> <span data-key="t-authentication">Type d'assurance</span>
                         </a>
+                        <div class="collapse menu-dropdown" id="sidebarInsurancetype">
+                            <ul class="nav nav-sm flex-column" >
+                                @if(Auth::user()->permission("AJOUT TYPE D'ASSURANCE"))
+                                    <li class="nav-item">
+                                        <a href="{{route("insurance-type.add",['ajouter'])}}" class="nav-link" data-key="t-calendar"> Ajouter un type d'assurance </a>
+                                    </li>
+                                @endif
+                                @if(Auth::user()->permission("LISTE TYPE D'ASSURANCE"))
+                                    <li class="nav-item">
+                                        <a href="{{route("insurance-type.index")}}" class="nav-link" data-key="t-calendar"> Liste type d'assurance  </a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
                     </li>
                 @endif
+                
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarStats" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarStats">
+                        <i class="ri-line-chart-line"></i> <span data-key="t-authentication">Statistique</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarStats">
+                        <ul class="nav nav-sm flex-column" >
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-calendar"> Rapport 1 </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-calendar"> Rapport 2 </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-calendar"> Rapport 3 </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-calendar"> Rapport 4 </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 
                 @if(Auth::user()->permission('AJOUT UTILISATEUR') || Auth::user()->permission('LISTE UTILISATEUR') || Auth::user()->permission('LISTE ROLE') || Auth::user()->permission('LISTE PERMISSION'))
                     <li class="nav-item">

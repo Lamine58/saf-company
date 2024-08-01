@@ -54,10 +54,8 @@
                 Auth::user()->access('AJOUT UTILISATEUR');
             }
             
-            $departements = [];
-            $regions = Region::all();
             $roles = Role::all();
-            return view('user.save',compact('user','title','departements','regions','roles'));
+            return view('user.save',compact('user','title','roles'));
         }
 
         public function save(Request $request)
@@ -71,7 +69,6 @@
 
             $validator = $request->validate([
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-                'matricule' => 'required|string',
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'phone' => 'required|string',

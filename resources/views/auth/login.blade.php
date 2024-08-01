@@ -20,7 +20,7 @@
                             <div class="col-lg-6">
                                 <div class="p-lg-5 p-4">
                                     <div>
-                                        <img src="{{asset('images/logo_mirah.webp')}}" style="width:200px" alt="">
+                                        <img src="{{asset('assets/images/logo-saf-short.png')}}" style="width:125px" alt="">
                                         <br><br>
                                         <p class="text-muted">Espace d'administration</p>
                                     </div>
@@ -46,7 +46,7 @@
                                             </div> -->
         
                                             <div class="mt-4">
-                                                <button class="btn btn-success w-100" id="user_login" style="background: #e35310;border-color: #e35310;" type="submit">Connexion</button>
+                                                <button class="btn btn-success w-100" id="user_login" style="background: #1d73b8;border-color: #1d73b8;" type="submit">Connexion</button>
                                             </div><br>
                                         </form>
                                     </div>

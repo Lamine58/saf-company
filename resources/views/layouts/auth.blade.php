@@ -7,7 +7,7 @@
     <title>@yield('title')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{asset("images/logo_mirah_sans_fond.webp")}}">
+    <link rel="shortcut icon" href="{{asset("assets/images/logo-saf-short.png")}}">
 
     <!-- Layout config Js -->
     <script src="{{asset("assets/js/layout.js")}}"></script>
@@ -24,7 +24,7 @@
 
 <style>
     .auth-one-bg {
-        background-image: url('{{asset("images/elevage-de-boeufs-bovins-en-afrique-1.jpg")}}');
+        background-image: url('{{asset("assets/images/expert-assurance.jpeg")}}');
         background-position: center;
         background-size: cover;
     }
@@ -37,25 +37,7 @@
 <body>
 
     <div class="auth-page-wrapper pt-5">
-        <!-- auth page bg -->
-        
         @yield('content')
-
-        {{-- <!-- footer -->
-        <footer>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="text-center">
-                            <p class="mb-0 text-muted">
-                                <img style="width:100px" src="{{asset('images/zodiac.png')}}" alt="">
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer> --}}
-        <!-- end Footer -->
     </div>
     <!-- end auth-page-wrapper -->
 
