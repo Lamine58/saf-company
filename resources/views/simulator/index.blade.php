@@ -42,6 +42,8 @@
 
     <!-- template styles -->
     <link rel="stylesheet" href="{{asset("simulator/assets/css/insur.css")}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.css" />
+
 </head>
 
 <style>
@@ -252,7 +254,7 @@
                     display: block;
                 }
                 @page {
-                    size: 1024px auto;
+                    size: 1024px auto; /* ou toute autre taille souhaitée */
                     margin: 0;
                 }
             }
@@ -321,6 +323,43 @@
                 text-align: start;
                 margin-bottom: 10px;
             }
+            .full_name,
+            .phone,
+            .formule_name{
+                text-transform: uppercase;
+                font-weight: bold;
+            }
+            .card {
+                position: relative;
+                width: 100%;
+                height: 220px;
+                background-size: cover;
+                background-position: center;
+                border-radius: 7px;
+                overflow: hidden;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(to bottom, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.8));
+                z-index: 1;
+            }
+
+            .card-content {
+                position: relative;
+                z-index: 2;
+                color: white;
+                text-align: center;
+                font-size: 28px;
+            }
+
         </style>
 
         <!--Page Header Start-->
@@ -345,16 +384,33 @@
                 <div style="color:black !important">
                     <p class="hidden print_this data-customer">
                         Nom et prénom : <span class="full_name"></span><br>
-                        <!--<span class="age" style="color:white"></span>
-                        <span class="age_conjoint" style="color:white"></span><br>-->
                         Contact : <span class="phone"></span><br>
                         Formule : <span class="formule_name"></span>
                     </p>
                     <br>
                 </div>
             </div>
+			<span class="age hidden" style="color:white"></span>
+			<span class="age_conjoint hidden" style="color:white"></span>
             {{-- <div class="data-insurance hidden print_this"></div> --}}
             <div class="container">
+                <div class="row">
+                    @php $i = 0; @endphp
+                    @foreach($insurance_types as $insurance_type)
+                        <div class="col-md-4">
+                            <a href="{{asset("images/{$insurance_type->file_description}")}}" data-fancybox="gallery" data-caption="{{$insurance_type->name}}">
+                                <div class="card" style="background-image:url({{asset("images/{$images[$i]}")}})">
+                                    <div class="overlay"></div>
+                                    <div class="card-content">
+                                        <span>{{$insurance_type->name}}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        @php $i++; @endphp
+                    @endforeach()
+                </div>
+                <br>
                 <p class="remove">Veuillez fournir vos informations afin d'obtenir une estimation approximative de votre prime d'assurance annuelle.<br><br></p>
                 <div class="row">
                     <div class="col-xl-6 remove">
@@ -370,7 +426,7 @@
                     <div class="col-xl-6 remove">
                         <div class="comment-form__input-box">
                             <select name="insurance_id" class="form-control" id="insurance_id">
-                                <option value="">Types d'assurances</option>
+                                <option value="" >TYPES D'ASSURANCES</option>
                                 @foreach($insurances as $insurance)
                                     <option value="{{$insurance->id}}">{{$insurance->name}}</option>
                                 @endforeach
@@ -380,32 +436,32 @@
                     <div class="col-xl-6 remove">
                         <div class="comment-form__input-box">
                             <select name="" class="form-control" id="insurance_type">
-                                <option value="">Maison d'assurance</option>
+                                <option value="">MAISONS D'ASSURANCES</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-xl-6 remove">
                         <div class="comment-form__input-box">
                             <select name="option" class="form-control" id="option">
-                                <option value="">Options</option>
+                                <option value="">OPTIONS</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-xl-6 remove">
                         <div class="comment-form__input-box">
                             <select name="formule" class="form-control" id="formule">
-                                <option value="">Formules</option>
+                                <option value="">FORMULES</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-xl-6 remove">
                         <div class="comment-form__input-box">
-                           <input type="date" placeholder="Date de naissance" style="height: 60px;" class="form-control input age" id="age" oninput="amount()">
+                           <input type="date" placeholder="Date de naissance" style="height: 60px;" class="form-control input age" id="age">
                         </div>
                     </div>
                     <div class="col-xl-6 remove">
                         <div class="comment-form__input-box ">
-                           <input type="date" placeholder="Date de naissance conjoint(e)" style="height: 60px;" class="form-control input age visibilty" id="age_conjoint" oninput="amount()">
+                           <input type="date" placeholder="Date de naissance conjoint(e)" style="height: 60px;" class="form-control input age visibilty" id="age_conjoint">
                         </div>
                     </div>
                     <hr>
@@ -428,10 +484,10 @@
                                 <h5 style="padding: 12px;background: #1d73b8;color: white !important;font-size: 17px;">TOTAL : <span id="amount">0</span> FCFA</h5>
                             </div>
                             <div class="col-md-12 text-end mt-2 remove">
+                                <button onclick="window.print()" class="thm-btn error-page__btn hidden printer" style="border:none">Imprimer la cotation <i class="fa fa-print"></i></button>
                                 <a class="thm-btn error-page__btn hidden care_network" target="_blank" href="" style="border:none">Réseau de soins <i class="fa fa-heartbeat"></i></a>
                                 <a class="thm-btn error-page__btn hidden file_description" target="_blank" href="" style="border:none">Brochure <i class="fa fa-file-pdf"></i></a>
                                 <a class="thm-btn error-page__btn hidden newsletter" target="_blank" href="" style="border:none">Télécharger le bulletin d'adhésion <i class="fa fa-download"></i></a>
-                                <button onclick="window.print()" class="thm-btn error-page__btn hidden printer" style="border:none">Imprimer la simulation <i class="fa fa-print"></i></button>
                             </div>
                        </div>
                        <br>
@@ -456,7 +512,7 @@
                                     <i class="fas fa-phone"></i>
                                 </div>
                                 <div class="cta-one__call-number">
-                                    <a href="tel:9200368090">(+225) 0102030405</a>
+                                    <a href="tel:05 95 70 55 59">(+225) 05 95 70 55 59 <br>(+225) 07 77 64 64 64</a>
                                     <p>Centre d'appel</p>
                                 </div>
                             </div>
@@ -518,6 +574,7 @@
     <script src="{{asset("simulator/assets/vendors/circleType/jquery.circleType.js")}}"></script>
     <script src="{{asset("simulator/assets/vendors/circleType/jquery.lettering.min.js")}}"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.js" ></script>
 
     <!-- template js -->
     <script src="{{asset("simulator/assets/js/insur.js")}}"></script>
@@ -526,7 +583,7 @@
         $('#full_name').on('change',function (){
             $('.full_name').text($(this).val())
         });
-        $('#age').on('change',function (){
+        $('#age').on('input',function (){
 
             $('.age').text('');
             // $('.age').text($(this).val());
@@ -539,11 +596,14 @@
                 age--;
             }
             if(age>0)
-                $('.age').text('Age : '+age+' ans');
+                //$('.age').text('Age : '+age+' ans');
+				$('.age').text(age)
+			
+			amount();
 
         });
 
-        $('#age_conjoint').on('change',function (){
+        $('#age_conjoint').on('input',function (){
 
             var birthdate = new Date($(this).val());
             var today = new Date();
@@ -555,7 +615,10 @@
             }
 
             if(age>0)
-                $('.age_conjoint').text('Age conjoint(e): '+age+' ans');
+                //$('.age_conjoint').text('Age conjoint(e): '+age+' ans');
+				$('.age_conjoint').text(age)
+			
+			amount();
 
         });
 
@@ -565,7 +628,7 @@
         });
         
 
-        $('#insurance_id').on('change',function(){
+        $('#insurance_id').on('input',function(){
 
             var insurance_id = $(this).val();
 
@@ -575,7 +638,7 @@
                 dataType:"json",
                 success: function(response) {
 
-                    var options = '<option value="">Maison d\'assurance</option>';
+                    var options = '<option disabled selected value="">MAISONS D\'ASSURANCES</option>';
                     $.each(response.insurance_types, function(index, insurance_type) {
                         options += '<option data-name="' + insurance_type.name + '" value="' + insurance_type.id + '" >' + insurance_type.name + '</option>';
                     });
@@ -587,7 +650,7 @@
             });
         });
 
-        $('#insurance_type').on('change',function(){
+        $('#insurance_type').on('input',function(){
 
             var insurance_type_id = $(this).val();
 
@@ -600,7 +663,7 @@
                 dataType:"json",
                 success: function(response) {
 
-                    var options = '<option value="">Options</option>';
+                    var options = '<option disabled selected value="">OPTIONS</option>';
                     $.each(response.options, function(index, option) {
                         options += '<option value="' + option + '" >' + option + '</option>';
                     });
@@ -659,7 +722,7 @@
                 dataType:"json",
                 success: function(response) {
 
-                    var options = '<option value="">Formules</option>';
+                    var options = '<option disabled selected value="">FORMULES</option>';
                     $.each(response.formules, function(index, formule) {
                         options += '<option value="' + formule.formule_name_original + '"  data-data="' + formule.formule_data + '"  data-limit="' + formule.formule_limit + '"  data-name="' + formule.formule_name + '" data-amount="' + formule.formule_amount + '">' + formule.formule_name + '</option>';
                     });
@@ -693,7 +756,7 @@
             amount();
         }
 
-        $('#formule').on('change',function(){
+        $('#formule').on('input',function(){
 
             var formule_name = $(this).val();
             var insurance_type_id = $('#insurance_type').val();
@@ -757,7 +820,7 @@
                             }
                         });
 
-                        var options_affections = '<option value="">Affections</option>';
+                        var options_affections = '<option  value="">Affections</option>';
 
 
                         $.each(response.affections, function(index, condition) {
@@ -772,7 +835,7 @@
 
                             var select = '<select  style="height: 40px !important;" class="select_affection select_important" onchange="select_affection(this)">'+options_affections+'</select>';
 
-                            input = '<input placeholder="Qte" type="number" oninput="amount()" min="1" class="select_value form-control" name="select_value">';
+                            input = '<input placeholder="Qte" type="hidden" oninput="amount()" min="1" value="1" class="select_value form-control" name="select_value">';
 
                             $('#div').append('<div class="div row"><div class="col-6">' + select + 
                             '</div><div class="col-3 name">' + name + '</div> <div class="col-3">' + input + '</div></div>');
@@ -831,7 +894,7 @@
 
                         });
 
-                        var options_affections = '<option value="">Affections</option>';
+                        var options_affections = '<option  value="">Affections</option>';
 
                         $.each(response.affections, function(index, condition) {
 
@@ -848,7 +911,7 @@
 
                                 var select = '<select  style="height: 40px !important;" class="select_affection select_important" onchange="select_affection(this)">'+options_affections+'</select>';
 
-                                input = '<input placeholder="Qte" type="number" oninput="amount()" min="1" class="select_value form-control" name="select_value">';
+                                input = '<input placeholder="Qte" type="number" oninput="amount()" min="1"  class="select_value form-control" name="select_value">';
 
                                 $('#div').append('<div class="div row"><div class="col-6">' + select + 
                                 '</div><div class="col-3 name">' + name + '</div> <div class="col-3">' + input + '</div></div>');
@@ -900,7 +963,7 @@
 
                         });
 
-                        var options_affections = '<option value="">Affections</option>';
+                        var options_affections = '<option  >Affections</option>';
 
                         console.log(response.affections);
 
@@ -971,7 +1034,7 @@
 
                         });
 
-                        var options_affections = '<option value="">Affections</option>';
+                        var options_affections = '<option value="" >Affections</option>';
 
                         console.log(response.affections);
 
@@ -1142,6 +1205,10 @@
 
             $('#age_data').html('');
             $('#age_data_conjoint').html('');
+			
+			
+			console.log(age);
+			console.log(age_conjoint);
 
             $.each(ages, function(index, element) {
 

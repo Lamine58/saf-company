@@ -12,6 +12,8 @@ class InsuranceType extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
+    
+
     protected $guarded = [
         'created_at',
         'updated_at',
@@ -30,6 +32,15 @@ class InsuranceType extends Model
     public function insurance()
     {
         return $this->belongsTo(Insurance::class);
+    }
+
+    public static function images (){
+        return [
+            'image-4.jpg',
+            'image-1.jpg',
+            'image-2.jpg',
+            'image-3.jpg',
+        ];
     }
 
 }
