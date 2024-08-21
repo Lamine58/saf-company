@@ -4,11 +4,11 @@
 
 @section('content')
 
-    <div class="main-content"> 
+    <div class="main-content">
 
         <div class="page-content">
             <div class="container-fluid">
- 
+
                 <!-- start page title -->
                 <div class="row">
                     <div class="col-12">
@@ -17,67 +17,28 @@
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Clients</a></li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Transfert d'Argent</a></li>
                                     <li class="breadcrumb-item active">{{$title}}</li>
                                 </ol>
                             </div>
-
+ 
                         </div>
                     </div>
                 </div>
 
-                <form action="{{route('customer.save')}}" class="add_customer">
+                <form  action="{{ route('transfert_money.import') }}" method="POST"  enctype="multipart/form-data" class="add_transfert_money">
                     @csrf
-                    <input type="hidden" name="id" value="{{$customer->id}}">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-2">
-                                            <label class="form-label">Avatar</label>
-                                            <input type="file" name="avatar" class="dropify" data-default-file="{{$customer->avatar!=null ? Storage::url($customer->avatar) : ''}}">
+                                        <div class="col-md-12">
+                                            <label class="form-label">Fichier</label>
+                                            <input type="file" name="file_upload" class="dropify" >
                                         </div>
-                                        <div class="col-md-10">
-                                            <div class="row g-3">
-
-                                                <div class="col-lg-6">
-                                                    <div>
-                                                        <label class="form-label">Nom</label>
-                                                        <input type="text" name="first_name" value="{{$customer->first_name}}" class="form-control rounded-end" required />
-                                                    </div>
-        
-                                                    <div  class="mt-3">
-                                                        <label class="form-label">Prénom</label>
-                                                        <input type="text" name="last_name" value="{{$customer->last_name }}" class="form-control rounded-end" required />
-                                                    </div>
-        
-                                                    <div  class="mt-3">
-                                                        <label class="form-label">Date de naissance</label>
-                                                        <input type="date" name="date_of_birth" value="{{$customer->date_of_birth }}" class="form-control rounded-end" required />
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="col-lg-6">
-                                                    <div >
-                                                        <label class="form-label">Téléphone</label>
-                                                        <input type="text" name="phone_number" value="{{$customer->phone_number}}" class="form-control rounded-end phone" required/>
-                                                    </div>
-
-                                                    <div class="mt-3">
-                                                        <label class="form-label">Email <small>(Facutatif)</small></label>
-                                                        <input type="text" name="email" value="{{$customer->email}}" class="form-control rounded-end" />
-                                                    </div>
-        
-                                                    <div  class="mt-3">
-                                                        <label class="form-label">Adresse</label>
-                                                        <input type="text" name="address" value="{{$customer->address }}" class="form-control rounded-end" required/>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12"> 
-                                                    <button id="add_customer" class="btn btn-primary btn-block" style="width:100%">Enregistrer</button>
-                                                </div>
-                                            </div>
+                                        <div class="col-lg-12 mt-3 text-center">
+                                            <button id="add_transfert_money" class="btn btn-primary btn-block" style="width:80%">Importer</button>
                                         </div>
                                     </div>
                                 </div>
@@ -126,14 +87,14 @@
             $('.summernote').summernote({height: 600});
         });
 
-        $('.add_customer').submit(function(e){
+        $('.add_transfert_money').submit(function(e){
 
             e.preventDefault();
 
             var form = new FormData($(this)[0]);
 
-            var buttonDefault = $('#add_customer').text();
-            var button = $('#add_customer');
+            var buttonDefault = $('#add_transfert_money').text();
+            var button = $('#add_transfert_money');
 
             button.attr('disabled',true);
             button.text('Veuillez patienter ...');
@@ -160,7 +121,7 @@
                             backgroundColor: "#4CAF50", // green
                         }).showToast();
 
-                        window.location='{{route("customer.index")}}'
+                        window.location='{{route("transfert_money.index")}}'
                     }else{
                         Toastify({
                             text: result.message,
@@ -194,7 +155,6 @@
                             backgroundColor: "red", // red
                         }).showToast();
                     }
-
                 }
             });
         });

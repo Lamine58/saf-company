@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Liste des utilisateurs')
+@section('title', 'Liste des souscriptions')
 
 @section('content')
 
@@ -13,12 +13,12 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">Liste des utilisateurs</h4>
+                            <h4 class="mb-sm-0">Liste des souscriptions</h4>
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">utilisateurs</a></li>
-                                    <li class="breadcrumb-item active">Liste des utilisateurs</li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">souscriptions</a></li>
+                                    <li class="breadcrumb-item active">Liste des souscriptions</li>
                                 </ol>
                             </div>
 
@@ -33,41 +33,67 @@
                                 <table id="table" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th></th>
-                                            <th>Nom et prénom</th>
-                                            <th>Téléphone</th>
-                                            <th>Email</th>
-                                            <th>Type de compte</th>
+                                            <th>  Numero </th>
+                                            <th>  Formule </th>
+                                            <th> Client </th>
+                                            <th> Téléphone </th>
+                                            <th> Email </th>
+                                            <th> Date d'Expiration </th>
+                                            <th> Fichier  </th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($users as $user)
+                                        @foreach ($souscriptions as $souscription)
                                             <tr>
-                                                <td><img width="50" src="{{ $user->avatar!='' ? Storage::url($user->avatar) : asset('/images/user.jpeg')}}" alt=""></td>
-                                                <td>{{$user->first_name}} {{$user->last_name}}</td>
-                                                <td>{{$user->phone}}</td>
-                                                <td>{{$user->email}}</td>
-                                                <td>{{$user->role->name}}</td>
+                                                <td>{{$souscription->number_souscriptions}} </td>
+                                                <td>{{$souscription->formule}}</td>
                                                 <td>
-                                                    @if(Auth::user()->permission('EDITION UTILISATEUR') || Auth::user()->permission('SUPPRESSION UTILISATEUR'))
+                                                    {{ $souscription->customer->first_name}} 
+                                                    {{ $souscription->customer->last_name}}
+                                                </td>
+                                                <td>{{$souscription->customer->phone_number}}</td>
+                                                <td>{{$souscription->customer->email}}</td>
+                                                <td>{{ date('d/m/Y',strtotime ($souscription->date_of_expiration))}}</td>
+                                                <td>
+                                                    @if($souscription->file_souscriptions)
+                                                        <a href="{{ route('souscription.downloadFile', $souscription->id) }}" class="btn btn-info btn-sm">
+                                                            <i class="ri-download-fill align-middle"></i> 
+                                                        </a>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if(Auth::user()->permission('AJOUT PAIEMENT') || Auth::user()->permission('EDITION SOUSCRIPTION') || Auth::user()->permission('SUPPRESSION SOUSCRIPTION'))
                                                         <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="ri-more-fill align-middle"></i>
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end">
-                                                            @if(Auth::user()->permission('EDITION UTILISATEUR'))
+                                                            @if(Auth::user()->permission('AJOUT PAIEMENT'))  
                                                                 <li>
-                                                                    <a class="dropdown-item edit-item-btn" href="{{route('user.add',[$user->id])}}"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Modifier</a>
+                                                                    <a class="dropdown-item edit-item-btn" href="{{route("payment.add",['id' => $souscription->id])}}">
+                                                                        <i class="ri-add-circle-line align-bottom me-2 text-muted"></i> 
+                                                                        Ajouter un paiement
+                                                                    </a>
                                                                 </li>
                                                             @endif
-                                                            @if(Auth::user()->permission('SUPPRESSION UTILISATEUR'))
+
+                                                            @if(Auth::user()->permission('EDITION SOUSCRIPTION'))  
                                                                 <li>
-                                                                    <a href="javascript:void(0);" onclick="deleted('{{$user->id}}','{{route('user.delete')}}')" class="dropdown-item remove-item-btn">
+                                                                    <a class="dropdown-item edit-item-btn" href="{{route('souscription.edit',[$souscription->id])}}">
+                                                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> 
+                                                                        Modifier
+                                                                    </a>
+                                                                </li>
+                                                            @endif
+
+                                                            @if(Auth::user()->permission('SUPPRESSION SOUSCRIPTION'))   
+                                                                <li>
+                                                                    <a href="javascript:void(0);" onclick="deleted('{{$souscription->id}}','{{route('souscription.delete')}}')" class="dropdown-item remove-item-btn">
                                                                         <i class="ri-delete-bin-fill align-bottom me-2 text-muted" ></i> Supprimer
                                                                     </a>
                                                                 </li>
                                                             @endif
-                                                        </ul> 
+                                                        </ul>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -77,18 +103,18 @@
                             </div>
                             <div>
                                 <ul class="pagination pagination-separated justify-content-center mb-0">
-                                    @if ($users->onFirstPage())
+                                    @if ($souscriptions->onFirstPage())
                                         <li class="page-item disabled">
                                             <span class="page-link"><i class="mdi mdi-chevron-left"></i></span>
                                         </li>
                                     @else
                                         <li class="page-item">
-                                            <a href="{{ $users->previousPageUrl() }}" class="page-link" rel="prev"><i class="mdi mdi-chevron-left"></i></a>
+                                            <a href="{{ $souscriptions->previousPageUrl() }}" class="page-link" rel="prev"><i class="mdi mdi-chevron-left"></i></a>
                                         </li>
                                     @endif
                         
-                                    @foreach ($users->getUrlRange(1, $users->lastPage()) as $page => $url)
-                                        @if ($page == $users->currentPage())
+                                    @foreach ($souscriptions->getUrlRange(1, $souscriptions->lastPage()) as $page => $url)
+                                        @if ($page == $souscriptions->currentPage())
                                             <li class="page-item active">
                                                 <span class="page-link">{{ $page }}</span>
                                             </li>
@@ -99,9 +125,10 @@
                                         @endif
                                     @endforeach
                         
-                                    @if ($users->hasMorePages())
+                                    @if ($souscriptions->hasMorePages())
+                                        
                                         <li class="page-item">
-                                            <a href="{{ $users->nextPageUrl() }}" class="page-link" rel="next"><i class="mdi mdi-chevron-right"></i></a>
+                                            <a href="{{ $souscriptions->nextPageUrl() }}" class="page-link" rel="next"><i class="mdi mdi-chevron-right"></i></a>
                                         </li>
                                     @else
                                         <li class="page-item disabled">

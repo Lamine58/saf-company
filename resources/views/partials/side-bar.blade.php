@@ -67,47 +67,68 @@
                         </div>
                     </li>
                 @endif
-                
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarSouscription" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSouscription">
-                        <i class="ri-file-list-line"></i> <span data-key="t-authentication">Souscriptions</span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="sidebarSouscription">
-                        <ul class="nav nav-sm flex-column" >
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-calendar"> Nouvelle souscription </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-calendar"> Souscription en cours </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-calendar"> Souscription expiré </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-calendar"> Paiements </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
 
+                @if(Auth::user()->permission("LISTE SOUSCRIPTION EN COURS") || Auth::user()->permission("LISTE SOUSCRIPTION EXPIRE")  || Auth::user()->permission("LISTE PAIEMENT")  
+                    || Auth::user()->permission("AJOUT SOUSCRIPTION") || Auth::user()->permission("SUPPRESSION SOUSCRIPTION") )
+                    
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sidebarSouscription" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSouscription">
+                            <i class="ri-file-list-line"></i> <span data-key="t-authentication">Souscriptions</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="sidebarSouscription">
+                            <ul class="nav nav-sm flex-column">
+                                @if(Auth::user()->permission("AJOUT SOUSCRIPTION"))
+                                    <li class="nav-item">
+                                        <a href="{{route("souscription.add",['ajouter'])}}" class="nav-link" data-key="t-calendar"> Nouvelle souscription </a>
+                                    </li>
+                                @endif    
+
+                                @if(Auth::user()->permission("LISTE SOUSCRIPTION EN COURS"))
+                                    <li class="nav-item">
+                                        <a href="{{route("souscription.index")}}" class="nav-link" data-key="t-calendar"> Souscription en cours </a>
+                                    </li>
+                                @endif 
+
+                                @if(Auth::user()->permission("LISTE SOUSCRIPTION EXPIRE"))
+                                    <li class="nav-item">
+                                        <a href="{{route("souscription.expired")}}" class="nav-link" data-key="t-calendar"> Souscription expiré </a>
+                                    </li>
+                                @endif 
+
+                                @if(Auth::user()->permission("LISTE PAIEMENT"))
+                                    <li class="nav-item">
+                                        <a href="{{route("payment.index")}}" class="nav-link" data-key="t-calendar"> Paiements </a>
+                                    </li>
+                                @endif 
+                            </ul>
+                        </div>
+                    </li>
+                @endif
+
+                @if(Auth::user()->permission("AJOUT TRANSFERT") || Auth::user()->permission("LISTE TRANSFERT"))
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarMoney" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMoney">
                         <i class="ri-arrow-left-right-line"></i> <span data-key="t-authentication">Transfert d'argent</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarMoney">
-                        <ul class="nav nav-sm flex-column" >
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-calendar"> Charger un rapport Excel</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-calendar"> Historique transaction </a>
-                            </li>
+                        <ul class="nav nav-sm flex-column" > 
+                            @if(Auth::user()->permission("AJOUT TRANSFERT"))
+                                <li class="nav-item">
+                                    <a href="{{route("transfert_money.add",['Charger'])}}" class="nav-link" data-key="t-calendar"> Charger un rapport Excel</a>
+                                </li>
+                            @endif
+                            @if(Auth::user()->permission("LISTE TRANSFERT"))
+                                <li class="nav-item">
+                                    <a href="{{route("transfert_money.index")}}"  class="nav-link" data-key="t-calendar"> Historique transaction </a>
+                                </li>
+                            @endif
                             <li class="nav-item">
                                 <a href="#" class="nav-link" data-key="t-calendar"> Rapports </a>
                             </li>
                         </ul>
                     </div>
                 </li>
+                @endif
                 
                 @if(Auth::user()->permission("LISTE TYPE D'ASSURANCE") || Auth::user()->permission("AJOUTER TYPE D'ASSURANCE"))
                     <li class="nav-item">

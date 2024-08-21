@@ -17,7 +17,7 @@
             $customers = Customer::paginate(100);
             return view('customer.index',compact('customers'));
         }
-
+ 
         public function add($id)
         {
             $customer = Customer::find($id);
@@ -31,7 +31,7 @@
                 $title = 'Ajouter un client';
 
                 Auth::user()->access('AJOUT CLIENT');
-            }
+            } 
             
             return view('customer.save',compact('customer','title'));
         }

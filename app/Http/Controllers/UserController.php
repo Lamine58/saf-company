@@ -108,7 +108,7 @@
 
         }
 
-        public function delete(Request $request){
+        public function delete(Request $request){ 
 
             Auth::user()->access('SUPPRESSION UTILISATEUR');
 

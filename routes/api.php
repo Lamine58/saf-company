@@ -33,4 +33,4 @@ Route::prefix('v1')->group(function () {
     Route::post('/add-business', [ApiController::class, 'add_business']);
     Route::post('/add-exploitation', [ApiController::class, 'add_exploitation']);
     
-});
+}); 

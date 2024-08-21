@@ -11,6 +11,11 @@ use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\SimulatorController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CRMController;
+use App\Http\Controllers\SouscriptionController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\TransfertMoneyController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +27,7 @@ use App\Http\Controllers\CRMController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+ 
 Route::get('/connexion', [AuthController::class, 'login'])->name('login');
 Route::post('/auth', [AuthController::class, 'auth'])->name('auth');
 Route::get('/simulateur', [SimulatorController::class, 'index'])->name('simulator.index');
@@ -69,6 +74,35 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/client/{id}', [CustomerController::class, 'add'])->name('customer.add');
     Route::post('/save-customer', [CustomerController::class, 'save'])->name('customer.save');
     Route::get('/delete-customer', [CustomerController::class, 'delete'])->name('customer.delete');
+
+    #souscription
+    Route::get('/souscription/{id}', [SouscriptionController::class, 'add'])->name('souscription.add');
+    Route::post('/save-souscription', [SouscriptionController::class, 'save'])->name('souscription.save');
+    Route::get('/liste-souscription', [SouscriptionController::class, 'index'])->name('souscription.index');
+    Route::get('/delete-souscription', [SouscriptionController::class, 'delete'])->name('souscription.delete');
+    Route::get('/liste-souscription-expire', [SouscriptionController::class, 'expired'])->name('souscription.expired');
+    Route::get('souscription/download/{id}', [SouscriptionController::class, 'downloadFile'])->name('souscription.downloadFile');
+
+    Route::get('/edit-souscription/{id}', [SouscriptionController::class, 'edit'])->name('souscription.edit');
+    Route::post('/save-edit-souscription', [SouscriptionController::class, 'save_edit'])->name('souscription.save_edit');
+
+    
+    #payment
+    Route::get('/liste-payment', [PaymentController::class, 'index'])->name('payment.index');
+    Route::get('/payment/{id}', [PaymentController::class, 'add'])->name('payment.add');
+    Route::post('/save-payment', [PaymentController::class, 'save'])->name('payment.save');
+    Route::get('/delete-payment', [PaymentController::class, 'delete'])->name('payment.delete');
+
+    Route::get('/edit-payment/{id}', [PaymentController::class, 'edit'])->name('payment.edit');
+    Route::post('/save-edit-payment', [PaymentController::class, 'save_edit'])->name('payment.save_edit');
+
+
+    #transfert_money
+    Route::get('/liste-transfert_argent', [TransfertMoneyController::class, 'index'])->name('transfert_money.index');
+    Route::get('/transfert_argent', [TransfertMoneyController::class, 'add'])->name('transfert_money.add');
+    Route::post('/import-transfert_argent', [TransfertMoneyController::class, 'import'])->name('transfert_money.import');
+    Route::get('/delete-transfert_argent', [TransfertMoneyController::class, 'delete'])->name('transfert_argent.delete');
+
   
     #role
     Route::get('/liste-des-roles', [RoleController::class, 'index'])->name('role.index');
