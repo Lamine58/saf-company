@@ -67,14 +67,17 @@
                                                     </div>
 
                                                     <div  class="mt-3">
-                                                        <label class="form-label">Date d'expiration </label>
-                                                        <input type="date" name="date_of_expiration" value="" class="form-control rounded-end" required />
+                                                        <label class="form-label"> Montant de la souscription  </label>
+                                                        <input type="number" name="amount_souscription" value="" class="form-control rounded-end" required />
                                                     </div>
-        
-                                                    <br>
                                                 </div>
 
-                                                <div class="col-lg-12 row mt-2">
+                                                <div class="col-lg-12">
+                                                    <label class="form-label">Date d'expiration </label>
+                                                    <input type="date" name="date_of_expiration" value="" class="form-control rounded-end" required />
+                                                </div>
+
+                                                <div class="col-lg-12 row mt-4">
                                                     <h4><small>Paiement</small></h4>
                                                     <hr>
                                                     <div class="col-lg-6">
@@ -100,6 +103,8 @@
                                                         <input type="text" name="amount" value="" class="form-control rounded-end" required />
                                                     </div>
                                                 </div>
+
+                                              
 
                                                 <div class="col-lg-12">
                                                     <button id="add_souscription" class="btn btn-primary btn-block" style="width:100%">Enregistrer</button>

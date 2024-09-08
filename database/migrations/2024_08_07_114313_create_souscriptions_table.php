@@ -16,6 +16,9 @@ return new class extends Migration
             $table->char('customer_id', 36);
             $table->string('number_souscriptions');
             $table->string('formule');
+            $table->integer('amount_souscription');
+            $table->integer('paid')->nullable();;
+            $table->integer('stay_paid')->nullable();
             $table->string('file_souscriptions');
             $table->date('date_of_expiration'); 
             $table->timestamps();

@@ -13,8 +13,8 @@
     use Illuminate\Support\Str;
     use Carbon\Carbon;
     use Illuminate\Support\Facades\Response;
+    use Illuminate\Support\Facades\DB;
     
-
 
     class SouscriptionController extends Controller
     {
@@ -24,11 +24,45 @@
             Auth::user()->access('LISTE SOUSCRIPTION EN COURS');
 
             $currentDate = Carbon::now();
-            $souscriptions = Souscription::with('customer')
+            $souscriptions = Souscription::with(['customer', 'payment'])
             ->where('date_of_expiration', '>', $currentDate)
             ->paginate(100);
             
+            foreach ($souscriptions as $souscription) {
+                $montantPayé = DB::table('payments')
+                    ->where('customer_id', $souscription->customer_id)
+                    ->where('souscription_id', $souscription->id)
+                    ->sum('amount');
+        
+                $souscription->paid = $montantPayé;
+        
+                $souscription->stay_paid = $souscription->amount_souscription - $montantPayé;
+            }
+
             return view('souscription.index', compact('souscriptions'));
+        }
+
+        public function expired()
+        {
+            Auth::user()->access('LISTE SOUSCRIPTION EXPIRE');
+
+            $currentDate = Carbon::now();
+            $expiredSubscriptions = Souscription::with(['customer', 'payment'])
+            ->where('date_of_expiration', '<', $currentDate)
+            ->paginate(100);
+            
+            foreach ($expiredSubscriptions as $expiredSubscription) {
+                $montantPayé = DB::table('payments')
+                    ->where('customer_id', $expiredSubscription->customer_id)
+                    ->where('souscription_id', $expiredSubscription->id)
+                    ->sum('amount');
+        
+                $expiredSubscription->paid = $montantPayé;
+        
+                $expiredSubscription->stay_paid = $expiredSubscription->amount_souscription - $montantPayé;
+            }
+    
+            return view('souscription.expired', compact('expiredSubscriptions'));
         }
 
         public function downloadFile($id)
@@ -40,17 +74,6 @@
            
         }
 
-        public function expired()
-        {
-            Auth::user()->access('LISTE SOUSCRIPTION EXPIRE');
-
-            $currentDate = Carbon::now();
-            $expiredSubscriptions = Souscription::where('date_of_expiration', '<', $currentDate)
-                ->with('customer') 
-                ->paginate(100);
-    
-            return view('souscription.expired', compact('expiredSubscriptions'));
-        }
 
         public function add($id)
         {
@@ -74,6 +97,7 @@
                 'customer_id' => 'nullable|string|exists:customers,id',
                 'formule' => 'required|string',
                 'date_of_expiration' => 'required|date',
+                'amount_souscription' => 'required|numeric',
                 //Les champs de la table Paiement
                 'ref_payment' => 'nullable|string',
                 'mode_payment' => 'nullable|string',
@@ -138,11 +162,12 @@
                 'number_souscriptions' => 'required|string',
                 'customer_id' => 'nullable|string|exists:customers,id',
                 'formule' => 'required|string',
+                'amount_souscription' => 'required|numeric',
                 'date_of_expiration' => 'required|date',
             ]);
 
             $data = $request->except(['file_souscriptions']);
-             
+              
             $file = $request->file('file_souscriptions');
             if ($file) {
                 $filePath = $file->storeAs('public/souscriptions', $file->hashName());

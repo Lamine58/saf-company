@@ -34,27 +34,30 @@
                                     <thead>
                                         <tr>
                                             <th>  Numero </th>
-                                            <th>  Formule </th>
                                             <th> Client </th>
-                                            <th> Téléphone </th>
-                                            <th> Email </th>
                                             <th> Date d'Expiration </th>
+                                            <th> Montant de la souscription </th>
+                                            <th>Payé</th>
+                                            <th>Reste à payé </th>
                                             <th> Fichier  </th>
                                             <th>Action</th>
+                                            <th> Email </th>
+                                            <th> Téléphone </th>
+                                            <th> Formule </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($souscriptions as $souscription)
                                             <tr>
                                                 <td>{{$souscription->number_souscriptions}} </td>
-                                                <td>{{$souscription->formule}}</td>
                                                 <td>
                                                     {{ $souscription->customer->first_name}} 
                                                     {{ $souscription->customer->last_name}}
                                                 </td>
-                                                <td>{{$souscription->customer->phone_number}}</td>
-                                                <td>{{$souscription->customer->email}}</td>
                                                 <td>{{ date('d/m/Y',strtotime ($souscription->date_of_expiration))}}</td>
+                                                <td>{{$souscription->amount_souscription}}</td>
+                                                <td>{{$souscription->paid}}</td>
+                                                <td>{{$souscription->stay_paid}}</td>
                                                 <td>
                                                     @if($souscription->file_souscriptions)
                                                         <a href="{{ route('souscription.downloadFile', $souscription->id) }}" class="btn btn-info btn-sm">
@@ -62,6 +65,8 @@
                                                         </a>
                                                     @endif
                                                 </td>
+
+                                                
                                                 <td>
                                                     @if(Auth::user()->permission('AJOUT PAIEMENT') || Auth::user()->permission('EDITION SOUSCRIPTION') || Auth::user()->permission('SUPPRESSION SOUSCRIPTION'))
                                                         <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -76,7 +81,6 @@
                                                                     </a>
                                                                 </li>
                                                             @endif
-
                                                             @if(Auth::user()->permission('EDITION SOUSCRIPTION'))  
                                                                 <li>
                                                                     <a class="dropdown-item edit-item-btn" href="{{route('souscription.edit',[$souscription->id])}}">
@@ -96,6 +100,9 @@
                                                         </ul>
                                                     @endif
                                                 </td>
+                                                <td>{{$souscription->customer->email}}</td>
+                                                <td>{{$souscription->customer->phone_number}}</td>
+                                                <td>{{$souscription->formule}}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

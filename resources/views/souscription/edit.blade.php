@@ -68,16 +68,19 @@
                                                         <label class="form-label">Formule</label>
                                                         <input type="text" name="formule" value="{{$souscription->formule}}" class="form-control rounded-end" required />
                                                     </div>
-
+ 
                                                     <div  class="mt-3">
-                                                        <label class="form-label">Date d'expiration </label>
-                                                        <input type="date" name="date_of_expiration" value="{{$souscription->date_of_expiration}}" class="form-control rounded-end" required />
+                                                        <label class="form-label"> Montant de la souscription  </label>
+                                                        <input type="number" name="amount_souscription" value="{{$souscription->amount_souscription}}" class="form-control rounded-end" required />
                                                     </div>
-        
-                                                    <br>
                                                 </div>
 
-                                               
+                                                <div class="col-lg-12 mb-4">
+                                                    <label class="form-label">Date d'expiration </label>
+                                                    <input type="date" name="date_of_expiration" value="{{$souscription->date_of_expiration}}" class="form-control rounded-end" required />
+                                                </div>
+        
+                                            </div>
 
                                                 <div class="col-lg-12">
                                                     <button id="edit_souscription" class="btn btn-primary btn-block" style="width:100%">Enregistrer</button>

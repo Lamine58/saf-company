@@ -31,4 +31,9 @@ class Souscription extends Model
         return $this->belongsTo(Customer::class, 'customer_id');
     }
 
+    public function payment()
+    {
+        return $this->belongsTo(payment::class, 'payment_id');
+    }
+
 }
